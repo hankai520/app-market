@@ -8,7 +8,7 @@ KEY(ID)
 VALUES 
     (1, 'demo', 'http://www.baidu.com/small.png', 'http://www.baidu.com/large.png', 'http://www.baidu.com/app.ipa', '1.0', '2016-03-15 15:14:21', 0, 'cn.com.sparksoft.zjsc');
 
--- 新建默认管理员账号
+-- 新建默认管理员账号（17761748443, 123456）
 MERGE INTO PUBLIC.USERS
     (ID, MOBILE, PASSWORD, CREATETIME, STATUS, ROLE)
 KEY(ID)
