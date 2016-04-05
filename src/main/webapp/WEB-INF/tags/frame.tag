@@ -19,7 +19,7 @@
             + path + "/";
 %>
 <base href="<%=basePath%>" />
-<title>星网 | 无线应用市场</title>
+<title>星网移动应用市场</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-switch.min.css" rel="stylesheet">
@@ -52,16 +52,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><span>易乐</span>游戏分销管理系统</a>
+                <a class="navbar-brand" href="admin"><span>星网</span> 移动应用市场</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span> 管理员1 <span class="caret"></span>
+                            <span class="glyphicon glyphicon-user"></span> ${ current_user.mobile } <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#"><span class="glyphicon glyphicon-user"></span>个人资料</a></li>
                             <li><a href="#"><span class="glyphicon glyphicon-cog"></span>设置</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>退出</a></li>
+                            <li><a href="admin/logout"><span class="glyphicon glyphicon-log-out"></span>退出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -76,12 +76,8 @@
             </div>
         </form>
         <ul class="nav menu">
-            <li id="miDashboard">
-                <a href="#"><span class="glyphicon glyphicon-dashboard"></span>中控台</a>
-            </li>
-            <li role="presentation" class="divider"></li>
             <li id="miApps">
-                <a href="apps"><span class="glyphicon glyphicon-th"></span>应用管理</a>
+                <a href="admin/apps"><span class="glyphicon glyphicon-th"></span>应用管理</a>
             </li>
             <li role="presentation" class="divider"></li>
             <li id="miUsers">

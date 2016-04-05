@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 /**
@@ -107,14 +108,17 @@ public class App implements Serializable {
     /**
      * 应用信息创建时间
      */
-    @Column(
-        nullable = false )
     @Temporal( TemporalType.DATE )
     private Date              createTime;
     /**
      * 应用状态
      */
     private AppStatus         status;
+    /**
+     * 应用状态国际化字串键
+     */
+    @Transient
+    private String            statusDesc;
 
     public Integer getId() {
         return id;
@@ -194,6 +198,14 @@ public class App implements Serializable {
 
     public void setStatus( AppStatus status ) {
         this.status = status;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc( String statusDesc ) {
+        this.statusDesc = statusDesc;
     }
 
     public static long getSerialversionuid() {

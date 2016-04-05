@@ -29,11 +29,31 @@ public final class Route {
     /**
      * 网站后台URL前缀
      */
-    private static final String BACKGROUND_PREFIX = "/admin";
+    public static final String  BACKGROUND_PREFIX = "/admin";
     /**
      * 后台登录
      */
     public static final String  BG_LOGIN          = BACKGROUND_PREFIX + "/login";
+    /**
+     * 后台应用列表
+     */
+    public static final String  BG_APPS           = BACKGROUND_PREFIX + "/apps";
+    /**
+     * 后台 AJAX 获取应用列表
+     */
+    public static final String  BG_AJAX_APPS      = BACKGROUND_PREFIX + "/apps.json";
+    /**
+     * 后台添加应用
+     */
+    public static final String  BG_APP_ADD        = BACKGROUND_PREFIX + "/apps/add";
+    /**
+     * 后台编辑应用
+     */
+    public static final String  BG_APP_EDIT       = BACKGROUND_PREFIX + "/apps/{appId}/edit";
+    /**
+     * 后台删除应用
+     */
+    public static final String  BG_APP_DELETE     = BACKGROUND_PREFIX + "/apps/{appId}/delete";
     /* ######################## 网站后台 URL 定义（结束） ############################ */
     /* ######################## 网站前台 URL 定义 ############################ */
 }

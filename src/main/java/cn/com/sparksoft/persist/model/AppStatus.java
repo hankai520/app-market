@@ -52,7 +52,7 @@ public enum AppStatus {
      * 获取用于国际化的键名
      */
     public String i18nKey() {
-        return String.format( "app.status.%d", value );
+        return String.format( "app.status.%s", name() );
     }
 
     @JsonValue

@@ -52,13 +52,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public static final SimpleDateFormat dateTimeFormatter    = new SimpleDateFormat(
         DATE_TIME_FORMAT );
     /**
-     * 回话数据键：当前登录用户
+     * 会话数据键：当前登录用户
      */
     public static final String           SESSION_KEY_USER     = "current_user";
     /**
-     * 回话数据键：用户登录前访问的 URL
+     * 会话数据键：用户登录前访问的 URL
      */
     public static final String           SESSION_KEY_LAST_URL = "last_url";
+    /**
+     * Cookie数据键：登录名
+     */
+    public static final String           COOKIE_KEY_LOGIN_ID  = "loginId";
+    /**
+     * Cookie数据键：密码
+     */
+    public static final String           COOKIE_KEY_PASSWORD  = "password";
     /**
      * 用于在页面渲染前传递页面级提示消息
      */
@@ -95,7 +103,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors( InterceptorRegistry registry ) {
         registry.addInterceptor( adminInterceptor )
-            .addPathPatterns( "/admin/*" )
+            .addPathPatterns( "/admin/**" )
             .excludePathPatterns( "/admin/login" );
     }
 

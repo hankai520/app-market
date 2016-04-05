@@ -24,6 +24,7 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import cn.com.sparksoft.config.Route;
 import cn.com.sparksoft.config.WebConfig;
 import cn.com.sparksoft.persist.AppService;
 import cn.com.sparksoft.persist.model.App;
@@ -49,92 +50,13 @@ public class AppController {
     @Autowired
     private MessageSource       messageSource;
 
-    @RequestMapping( "/apps" )
+    @RequestMapping( Route.BG_APPS )
     public ModelAndView index() {
-        // return new ModelAndView( "apps" );
-        return new ModelAndView( "redirect:/404.html" );
+        return new ModelAndView( "apps" );
     }
 
     @RequestMapping(
-        value = "/apps/add",
-        method = RequestMethod.GET )
-    public ModelAndView showAddAppForm() {
-        ModelAndView mav = new ModelAndView( "addApp" );
-        mav.addObject( "app", new App() );
-        return mav;
-    }
-
-    @RequestMapping(
-        value = "/apps/add",
-        method = RequestMethod.POST )
-    public ModelAndView addApp( @ModelAttribute( "app" ) @Valid App app,
-                    BindingResult br ) {
-        ModelAndView mav = new ModelAndView( "addApp" );
-        if ( br.hasErrors() ) {
-            mav.addObject( "app", app );
-        } else {
-            try {
-                appService.save( app );
-                // if ( attachmentService.saveAttachment( game.getLogo() ) ) {
-                // mav.addObject( WebConfig.WEB_PAGE_MESSAGE,
-                // messageSource.getMessage( "operation.success", null, null ) );
-                // mav.addObject( "game", new Game() );
-                // } else {
-                // logger.error(
-                // String.format( "Failed to save cached attachment %s.", game.getLogo() ) );
-                // mav.addObject( "game", game );
-                // mav.addObject( WebConfig.WEB_PAGE_ERROR,
-                // messageSource.getMessage( "operation.fail", null, null ) );
-                // }
-            } catch (Exception e) {
-                mav.addObject( "app", app );
-                mav.addObject( WebConfig.WEB_PAGE_ERROR,
-                    messageSource.getMessage( "operation.fail", null, null ) );
-            }
-        }
-        return mav;
-    }
-
-    @RequestMapping(
-        value = "/apps/{appId}/edit",
-        method = RequestMethod.GET )
-    public ModelAndView showEditAppForm( @PathVariable( "appId" ) Integer appId ) {
-        ModelAndView mav = new ModelAndView( "editApp" );
-        App app = appService.find( appId );
-        if ( app != null ) {
-            mav.addObject( "app", app );
-        } else {
-            mav.setViewName( "redirect:/404.html" );
-        }
-        return mav;
-    }
-
-    @RequestMapping(
-        value = "/apps/{appId}/edit",
-        method = RequestMethod.POST )
-    public ModelAndView editApp( @PathVariable( "appId" ) Integer appId,
-                    @ModelAttribute( "app" ) @Valid App app, BindingResult br ) {
-        ModelAndView mav = new ModelAndView( "editApp" );
-        App existApp = jpaUtil.findUniqueBy( App.class, "name", app.getName() );
-        if ( ( existApp != null ) && !existApp.getId().equals( appId ) ) {
-            br.rejectValue( "name", "Duplicate.app.name" );
-        }
-        app.setId( appId );
-        if ( !br.hasErrors() ) {
-            try {
-                app.setUpdateTime( new Date() );
-                appService.update( app );
-            } catch (Exception e) {
-                mav.addObject( WebConfig.WEB_PAGE_ERROR,
-                    messageSource.getMessage( "operation.fail", null, null ) );
-            }
-        }
-        mav.addObject( "app", app );
-        return mav;
-    }
-
-    @RequestMapping(
-        value = "/apps.json",
+        value = Route.BG_AJAX_APPS,
         produces = { "application/json; charset=utf-8" } )
     @ResponseBody
     public PaginatedList getAppList(
@@ -152,6 +74,12 @@ public class AppController {
         PaginatedList response = null;
         try {
             PaginatedResult<App> result = appService.findAll( 0, -1 );
+            if ( ( result != null ) && ( result.getObjects() != null ) ) {
+                for ( App app : result.getObjects() ) {
+                    String str = messageSource.getMessage( app.getStatus().i18nKey(), null, null );
+                    app.setStatusDesc( str );
+                }
+            }
             response = new PaginatedList();
             response.setTotal( result.getCount() );
             response.setRows( result.getObjects() );
@@ -163,9 +91,97 @@ public class AppController {
         return response;
     }
 
-    @RequestMapping( "/apps/{appId}/delete" )
-    public ModelAndView deleteGame( @PathVariable( "appId" ) Integer appId ) {
-        ModelAndView mav = new ModelAndView( "redirect:/apps" );
+    @RequestMapping(
+        value = Route.BG_APP_ADD,
+        method = RequestMethod.GET )
+    public ModelAndView showAddAppForm() {
+        ModelAndView mav = new ModelAndView( "add_app" );
+        mav.addObject( "app", new App() );
+        return mav;
+    }
+
+    @RequestMapping(
+        value = Route.BG_APP_ADD,
+        method = RequestMethod.POST )
+    public ModelAndView addApp( @ModelAttribute( "app" ) @Valid App app,
+                    BindingResult br ) {
+        ModelAndView mav = new ModelAndView( "add_app" );
+        App existApp = jpaUtil.findUniqueBy( App.class, "bundleIdentifier",
+            app.getBundleIdentifier() );
+        if ( existApp != null ) {
+            br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
+        }
+        if ( br.hasErrors() ) {
+            mav.addObject( "app", app );
+        } else {
+            try {
+                app.setCreateTime( new Date() );
+                appService.save( app );
+                mav.addObject( WebConfig.WEB_PAGE_MESSAGE,
+                    messageSource.getMessage( "operation.success", null, null ) );
+                mav.addObject( "app", new App() );
+            } catch (Exception e) {
+                mav.addObject( "app", app );
+                mav.addObject( WebConfig.WEB_PAGE_ERROR,
+                    messageSource.getMessage( "operation.fail", null, null ) );
+            }
+        }
+        return mav;
+    }
+
+    @RequestMapping(
+        value = Route.BG_APP_EDIT,
+        method = RequestMethod.GET )
+    public ModelAndView showEditAppForm( @PathVariable( "appId" ) Integer appId ) {
+        ModelAndView mav = new ModelAndView( "edit_app" );
+        App app = appService.find( appId );
+        if ( app != null ) {
+            mav.addObject( "app", app );
+        } else {
+            mav.setViewName( "redirect:/404.html" );
+        }
+        return mav;
+    }
+
+    @RequestMapping(
+        value = Route.BG_APP_EDIT,
+        method = RequestMethod.POST )
+    public ModelAndView editApp(
+                    @PathVariable( "appId" ) Integer appId,
+                    @ModelAttribute( "app" ) @Valid App app, BindingResult br ) {
+        ModelAndView mav = new ModelAndView( "edit_app" );
+        App localApp = appService.find( appId );
+        if ( localApp == null ) {
+            mav.setViewName( "redirect:/404.html" );
+        } else {
+            App existApp = jpaUtil.findUniqueBy( App.class, "bundleIdentifier",
+                app.getBundleIdentifier() );
+            if ( ( existApp != null ) && !existApp.getId().equals( appId ) ) {
+                br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
+            }
+            app.setId( appId );
+            if ( !br.hasErrors() ) {
+                try {
+                    app.setCreateTime( localApp.getCreateTime() );
+                    app.setUpdateTime( new Date() );
+                    appService.update( app );
+                    mav.addObject( WebConfig.WEB_PAGE_MESSAGE,
+                        messageSource.getMessage( "operation.success", null, null ) );
+                } catch (Exception e) {
+                    mav.addObject( WebConfig.WEB_PAGE_ERROR,
+                        messageSource.getMessage( "operation.fail", null, null ) );
+                }
+            }
+            mav.addObject( "app", app );
+        }
+        return mav;
+    }
+
+    @RequestMapping(
+        value = Route.BG_APP_DELETE,
+        method = RequestMethod.GET )
+    public ModelAndView deleteApp( @PathVariable( "appId" ) Integer appId ) {
+        ModelAndView mav = new ModelAndView( "redirect:" + Route.BG_APPS );
         App app = appService.find( appId );
         if ( app == null ) {
             mav.setViewName( "redirect:/404.html" );

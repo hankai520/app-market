@@ -13,7 +13,7 @@
             $('#miApps').addClass('active');
             <!--// 必须用JS来初始化表格，因为通过HTML属性来初始化，本地化JS的执行会滞后，因而失效 -->
             $('#appsTable').bootstrapTable({
-                url: apps.json',
+                url: 'admin/apps.json',
                 sidePagination: 'server',
                 showRefresh: true,
                 pageList: [10,20,50,100],
@@ -26,21 +26,23 @@
                     sortable: 'true',
                     valign: 'middle'
                 }, {
-                    field: 'smallImageUrl',
-                    title: '图标',
-                    valign: 'middle',
-                    formatter: function(value, row, index) {
-                        if (value && value.length > 0) {
-                            return '<img src="' + value + '" class="logo-thumbnail" />';
-                        } else {
-                            return '-';
-                        }
-                    }
-                }, {
                     field: 'name',
                     title: '名称',
                     valign: 'middle',
+                    sortable: 'true',
+                    formatter: function (value, row, index) {
+                        return '<a href="admin/apps/' + row.id + '/edit">' + value + '</a>';
+                    }
+                }, {
+                    field: 'version',
+                    title: '版本',
+                    valign: 'middle',
                     sortable: 'true'
+                }, {
+                    field: 'bundleIdentifier',
+                    title: '程序包ID',
+                    valign: 'middle',
+                    sortable: 'false'
                 }, {
                     field: 'packageUrl',
                     title: '安装包',
@@ -52,11 +54,10 @@
                         }
                     }
                 }, {
-                    title: '操作',
+                    field: 'statusDesc',
+                    title: '状态',
                     valign: 'middle',
-                    formatter: function (value, row, index) {
-                        return '<a href="apps/' + row.id + '/edit"><i class="glyphicon glyphicon-edit"></i></a>';
-                    }
+                    sortable: 'false'
                 }]
             });
         </script>
@@ -73,7 +74,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="columns btn-group pull-left">
-                            <a href="apps/add">
+                            <a href="admin/apps/add">
                                 <button class="btn btn-info" type="button" title="添加应用">
                                     <i class="glyphicon glyphicon-plus"></i>
                                     添加应用
