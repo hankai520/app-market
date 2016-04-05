@@ -39,6 +39,7 @@ public class ConnectorConfig implements TomcatConnectorCustomizer {
             connector.setProxyName( proxyName );
             connector.setProxyPort( proxyPort );
             connector.setRedirectPort( proxyPort );
+            connector.setScheme( "https" );
         }
     }
 }
