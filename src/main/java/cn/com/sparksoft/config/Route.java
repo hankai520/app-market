@@ -56,4 +56,9 @@ public final class Route {
     public static final String  BG_APP_DELETE     = BACKGROUND_PREFIX + "/apps/{appId}/delete";
     /* ######################## 网站后台 URL 定义（结束） ############################ */
     /* ######################## 网站前台 URL 定义 ############################ */
+    /**
+     * 网站前台应用列表
+     */
+    public static final String  FG_APPS           = "/apps";
+    /* ######################## 网站前台 URL 定义 ############################ */
 }

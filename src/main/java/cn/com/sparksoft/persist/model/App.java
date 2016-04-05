@@ -47,7 +47,7 @@ public class App implements Serializable {
         nullable = false )
     @Size(
         min = 1,
-        max = 6 )
+        max = 20 )
     private String            name;
     /**
      * 应用标识符
@@ -115,10 +115,19 @@ public class App implements Serializable {
      */
     private AppStatus         status;
     /**
-     * 应用状态国际化字串键
+     * 应用状态国际化字串
      */
     @Transient
     private String            statusDesc;
+    /**
+     * 应用运行平台
+     */
+    private AppPlatform       platform;
+    /**
+     * 应用运行平台国际化字串
+     */
+    @Transient
+    private String            platformDesc;
 
     public Integer getId() {
         return id;
@@ -206,6 +215,22 @@ public class App implements Serializable {
 
     public void setStatusDesc( String statusDesc ) {
         this.statusDesc = statusDesc;
+    }
+
+    public AppPlatform getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform( AppPlatform platform ) {
+        this.platform = platform;
+    }
+
+    public String getPlatformDesc() {
+        return platformDesc;
+    }
+
+    public void setPlatformDesc( String platformDesc ) {
+        this.platformDesc = platformDesc;
     }
 
     public static long getSerialversionuid() {

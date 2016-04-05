@@ -78,6 +78,8 @@ public class AppController {
                 for ( App app : result.getObjects() ) {
                     String str = messageSource.getMessage( app.getStatus().i18nKey(), null, null );
                     app.setStatusDesc( str );
+                    str = messageSource.getMessage( app.getPlatform().i18nKey(), null, null );
+                    app.setPlatformDesc( str );
                 }
             }
             response = new PaginatedList();

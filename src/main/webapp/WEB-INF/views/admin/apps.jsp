@@ -54,6 +54,11 @@
                         }
                     }
                 }, {
+                    field: 'platformDesc',
+                    title: '平台',
+                    valign: 'middle',
+                    sortable: 'false'
+                }, {
                     field: 'statusDesc',
                     title: '状态',
                     valign: 'middle',

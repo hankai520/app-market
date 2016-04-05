@@ -76,6 +76,8 @@
             </div>
         </form>
         <ul class="nav menu">
+            <li><a href=""><span class="glyphicon glyphicon-home"></span>网站前台</a></li>
+            <li role="presentation" class="divider"></li>
             <li id="miApps">
                 <a href="admin/apps"><span class="glyphicon glyphicon-th"></span>应用管理</a>
             </li>

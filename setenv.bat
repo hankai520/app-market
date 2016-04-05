@@ -8,4 +8,4 @@ set TCP_LISTEN=0.0.0.0
 set TCP_PORT=8000
 
 rem More arguments passed to spring boot or jvm
-set EXTRA_ARGS=
+set EXTRA_ARGS=--proxy.name=apps.sparksoft.com.cn --proxy.port=443

@@ -81,6 +81,14 @@
                                     <form:errors cssClass="field-error" path="version" />
                                 </div>
                                 <div class="form-group">
+                                    <label>运行平台 <span class="fg-red">*</span></label>
+                                    <form:select path="platform" cssClass="form-control">
+                                        <form:option value="iOS"><fmt:message key="app.platform.iOS" /></form:option>
+                                        <form:option value="Android"><fmt:message key="app.platform.Android" /></form:option>
+                                    </form:select>
+                                    <form:errors cssClass="field-error" path="platform" />
+                                </div>
+                                <div class="form-group">
                                     <label>状态 <span class="fg-red">*</span></label>
                                     <form:select path="status" cssClass="form-control">
                                         <form:option value="Developing"><fmt:message key="app.status.Developing" /></form:option>
