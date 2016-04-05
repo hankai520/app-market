@@ -6,6 +6,7 @@
 
 package cn.com.sparksoft.config.tomcat;
 
+import org.apache.catalina.valves.RemoteIpValve;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -37,6 +38,11 @@ public class ContainerConfig implements EmbeddedServletContainerCustomizer {
             TomcatEmbeddedServletContainerFactory cf =
                                                      (TomcatEmbeddedServletContainerFactory) container;
             cf.addConnectorCustomizers( connectorConfig );
+            RemoteIpValve riv = new RemoteIpValve();
+            riv.setRemoteIpHeader( "x-forwarded-for" );
+            riv.setProxiesHeader( "x-forwarded-by" );
+            riv.setProtocolHeader( "x-forwarded-proto" );
+            cf.addContextValves( riv );
         }
     }
 }
