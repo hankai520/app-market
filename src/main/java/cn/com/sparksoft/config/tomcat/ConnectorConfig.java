@@ -38,6 +38,7 @@ public class ConnectorConfig implements TomcatConnectorCustomizer {
         if ( !StringUtils.isEmpty( proxyName ) && ( proxyPort != null ) && ( proxyPort > 0 ) ) {
             connector.setProxyName( proxyName );
             connector.setProxyPort( proxyPort );
+            connector.setRedirectPort( proxyPort );
         }
     }
 }
