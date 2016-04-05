@@ -42,15 +42,10 @@
                     field: 'bundleIdentifier',
                     title: '程序包ID',
                     valign: 'middle',
-                    sortable: 'false'
-                }, {
-                    field: 'packageUrl',
-                    title: '安装包',
-                    valign: 'middle',
                     sortable: 'false',
                     formatter: function (value, row, index) {
                         if (value && value.length > 0) {
-                            return '<a href="' + value + '">' + value + '</a>';
+                            return '<a href="' + row.packageUrl + '">' + value + '</a>';
                         }
                     }
                 }, {
