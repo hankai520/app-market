@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
 import java.util.HashMap;
@@ -71,7 +70,7 @@ public class AppApi {
         value = Route.API_IOS_MANIFEST,
         produces = { MediaType.APPLICATION_XML_VALUE } )
     public ResponseEntity<String> generateIosManifest(
-                    @RequestParam( "app_id" ) Integer appId,
+                    @PathVariable( "appId" ) Integer appId,
                     HttpServletRequest request ) {
         App app = appService.find( appId );
         if ( app != null ) {
