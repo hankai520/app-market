@@ -6,6 +6,8 @@
 
 package cn.com.sparksoft.persist.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -80,15 +82,10 @@ public class App implements Serializable {
         max = 400 )
     private String            largeImageUrl;
     /**
-     * 程序安装包 URL（ios: .ipa文件地址，android：.apk文件地址）
+     * 程序包文件
      */
-    @Column(
-        length = 1000,
-        nullable = false )
-    @Size(
-        min = 1,
-        max = 400 )
-    private String            packageUrl;
+    @Transient
+    private MultipartFile     packageFile;
     /**
      * 程序版本
      */
@@ -169,12 +166,12 @@ public class App implements Serializable {
         this.largeImageUrl = largeImageUrl;
     }
 
-    public String getPackageUrl() {
-        return packageUrl;
+    public MultipartFile getPackageFile() {
+        return packageFile;
     }
 
-    public void setPackageUrl( String packageUrl ) {
-        this.packageUrl = packageUrl;
+    public void setPackageFile( MultipartFile packageFile ) {
+        this.packageFile = packageFile;
     }
 
     public String getVersion() {

@@ -24,6 +24,10 @@ public final class Route {
      * ios manifest 文件生成
      */
     public static final String  API_IOS_MANIFEST  = API_PREFIX + "/app/ios_manifest";
+    /**
+     * app 程序包下载
+     */
+    public static final String  API_APP_PACKAGE   = API_PREFIX + "/app/{appId}/package";
     /* ######################## 网站接口 URL 定义 （结束） ############################ */
     /* ######################## 网站后台 URL 定义（开始） ############################ */
     /**

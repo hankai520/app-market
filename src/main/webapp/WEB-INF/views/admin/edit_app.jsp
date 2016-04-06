@@ -37,7 +37,7 @@
         </div><!--/.row-->
         <div class="row">
             <div class="col-lg-12">
-                <form:form method="post" action="admin/apps/${ app.id }/edit" modelAttribute="app">
+                <form:form method="post" action="admin/apps/${ app.id }/edit" enctype="multipart/form-data" modelAttribute="app">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <p>编辑应用</p>
@@ -79,9 +79,9 @@
                                     <form:errors cssClass="field-error" path="largeImageUrl" />
                                 </div>
                                 <div class="form-group">
-                                    <label>安装包 URL <span class="fg-red">*</span></label>
-                                    <form:input path="packageUrl" cssClass="form-control" maxlength="200" placeholder="最大长度200个字符，android为apk文件，ios为ipa文件" />
-                                    <form:errors cssClass="field-error" path="packageUrl" />
+                                    <label>安装包 </label>
+                                    <form:input path="packageFile" type="file" cssClass="form-control"/>
+                                    <form:errors cssClass="field-error" path="packageFile" />
                                 </div>
                                 <div class="form-group">
                                     <label>版本号 <span class="fg-red">*</span></label>

@@ -42,12 +42,7 @@
                     field: 'bundleIdentifier',
                     title: '程序包ID',
                     valign: 'middle',
-                    sortable: 'false',
-                    formatter: function (value, row, index) {
-                        if (value && value.length > 0) {
-                            return '<a href="' + row.packageUrl + '">' + value + '</a>';
-                        }
-                    }
+                    sortable: 'false'
                 }, {
                     field: 'platformDesc',
                     title: '平台',

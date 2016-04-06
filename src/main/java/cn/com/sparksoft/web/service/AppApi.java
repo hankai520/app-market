@@ -10,16 +10,21 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import cn.com.sparksoft.config.Route;
 import cn.com.sparksoft.persist.AppService;
@@ -42,13 +47,40 @@ public class AppApi {
     private VelocityEngine      engine;
 
     @RequestMapping(
+        value = Route.API_APP_PACKAGE,
+        produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE } )
+    public ResponseEntity<FileSystemResource> appPackage( @PathVariable( "appId" ) Integer appId ) {
+        App app = appService.find( appId );
+        File file = null;
+        if ( app != null ) {
+            String path = appService.getAppPackagePath( appId, app.getPlatform() );
+            File f = new File( path );
+            if ( f.exists() ) {
+                file = f;
+            }
+        }
+        if ( file != null ) {
+            return new ResponseEntity<FileSystemResource>( new FileSystemResource( file ),
+                HttpStatus.OK );
+        } else {
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+        }
+    }
+
+    @RequestMapping(
         value = Route.API_IOS_MANIFEST,
         produces = { MediaType.APPLICATION_XML_VALUE } )
-    public ResponseEntity<String> generateIosManifest( @RequestParam( "app_id" ) Integer appId) {
+    public ResponseEntity<String> generateIosManifest(
+                    @RequestParam( "app_id" ) Integer appId,
+                    HttpServletRequest request ) {
         App app = appService.find( appId );
         if ( app != null ) {
+            String packageUrl = request.getScheme() + "://"
+                + request.getServerName() + ":" + request.getServerPort()
+                + request.getContextPath();
+            packageUrl += Route.API_APP_PACKAGE.replaceAll( "\\{appId\\}", appId + "" );
             Map<String, Object> model = new HashMap<>();
-            model.put( "packageUrl", app.getPackageUrl() );
+            model.put( "packageUrl", packageUrl );
             model.put( "smallImageUrl", app.getSmallImageUrl() );
             model.put( "largeImageUrl", app.getLargeImageUrl() );
             model.put( "bundleIdentifier", app.getBundleIdentifier() );

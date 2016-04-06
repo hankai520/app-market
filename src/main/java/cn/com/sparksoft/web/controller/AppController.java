@@ -105,7 +105,8 @@ public class AppController {
     @RequestMapping(
         value = Route.BG_APP_ADD,
         method = RequestMethod.POST )
-    public ModelAndView addApp( @ModelAttribute( "app" ) @Valid App app,
+    public ModelAndView addApp(
+                    @ModelAttribute( "app" ) @Valid App app,
                     BindingResult br ) {
         ModelAndView mav = new ModelAndView( "add_app" );
         App existApp = jpaUtil.findUniqueBy( App.class, "bundleIdentifier",
@@ -113,12 +114,20 @@ public class AppController {
         if ( existApp != null ) {
             br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
         }
+        if ( app.getPackageFile() == null ) {
+            br.rejectValue( "packageFile", "NotNull.app.packageFile" );
+        }
         if ( br.hasErrors() ) {
             mav.addObject( "app", app );
         } else {
             try {
                 app.setCreateTime( new Date() );
                 appService.save( app );
+                boolean saveResult = appService.saveAppPackage( app.getId(), app.getPlatform(),
+                    app.getPackageFile() );
+                if ( !saveResult ) {
+                    br.rejectValue( "packageFile", "Error.app.packageFile" );
+                }
                 mav.addObject( WebConfig.WEB_PAGE_MESSAGE,
                     messageSource.getMessage( "operation.success", null, null ) );
                 mav.addObject( "app", new App() );
@@ -160,6 +169,13 @@ public class AppController {
                 app.getBundleIdentifier() );
             if ( ( existApp != null ) && !existApp.getId().equals( appId ) ) {
                 br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
+            }
+            if ( app.getPackageFile() != null ) {
+                boolean saveResult = appService.saveAppPackage( appId, app.getPlatform(),
+                    app.getPackageFile() );
+                if ( !saveResult ) {
+                    br.rejectValue( "packageFile", "Error.app.packageFile" );
+                }
             }
             app.setId( appId );
             if ( !br.hasErrors() ) {
