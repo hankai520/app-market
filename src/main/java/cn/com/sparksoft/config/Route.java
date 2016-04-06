@@ -23,7 +23,8 @@ public final class Route {
     /**
      * ios manifest 文件生成
      */
-    public static final String  API_IOS_MANIFEST        = API_PREFIX + "/app/{appId}/ios_manifest";
+    public static final String  API_IOS_MANIFEST        =
+                                                 API_PREFIX + "/app/{appId}/ios_manifest.plist";
     /**
      * ios app 程序包下载
      */

@@ -68,7 +68,7 @@ public class AppApi {
 
     @RequestMapping(
         value = Route.API_IOS_MANIFEST,
-        produces = { MediaType.APPLICATION_XML_VALUE } )
+        produces = { MediaType.TEXT_XML_VALUE } )
     public ResponseEntity<String> generateIosManifest(
                     @PathVariable( "appId" ) Integer appId,
                     HttpServletRequest request ) {
