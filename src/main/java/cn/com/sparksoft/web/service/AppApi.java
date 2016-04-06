@@ -46,7 +46,7 @@ public class AppApi {
     private VelocityEngine      engine;
 
     @RequestMapping(
-        value = Route.API_APP_PACKAGE,
+        value = { Route.API_APP_IOS_PACKAGE, Route.API_APP_ANDROID_PACKAGE },
         produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE } )
     public ResponseEntity<FileSystemResource> appPackage( @PathVariable( "appId" ) Integer appId ) {
         App app = appService.find( appId );
@@ -77,7 +77,7 @@ public class AppApi {
             String packageUrl = request.getScheme() + "://"
                 + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath();
-            packageUrl += Route.API_APP_PACKAGE.replaceAll( "\\{appId\\}", appId + "" );
+            packageUrl += Route.API_APP_IOS_PACKAGE.replaceAll( "\\{appId\\}", appId + "" );
             Map<String, Object> model = new HashMap<>();
             model.put( "packageUrl", packageUrl );
             model.put( "smallImageUrl", app.getSmallImageUrl() );
