@@ -77,5 +77,4 @@
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
-<a href="http://webscan.360.cn/index/checkwebsite/url/apps.sparksoft.com.cn" name="489d63613426513b8d8c65248188829d" >360网站安全检测平台</a>
 </html>
