@@ -77,7 +77,7 @@
                                     <form:errors cssClass="field-error" path="bundleIdentifier" />
                                 </div>
                                 <div class="form-group">
-                                    <label>图标 <span class="fg-red">*</span></label>
+                                    <label>图标</label>
                                     <form:input path="iconFile" type="file" cssClass="form-control"/>
                                     <form:errors cssClass="field-error" path="iconFile" />
                                 </div>

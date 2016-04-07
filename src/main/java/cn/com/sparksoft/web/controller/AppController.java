@@ -160,10 +160,10 @@ public class AppController {
         if ( localApp == null ) {
             mav.setViewName( "redirect:/404.html" );
         } else {
-            if ( app.getPackageFile() != null ) {
+            if ( ( app.getPackageFile() != null ) && ( app.getPackageFile().getSize() > 0l ) ) {
                 appService.saveAppPackage( appId, app.getPlatform(), app.getPackageFile() );
             }
-            if ( app.getIconFile() != null ) {
+            if ( ( app.getIconFile() != null ) && ( app.getIconFile().getSize() > 0l ) ) {
                 appService.saveAppIcon( appId, app.getPlatform(), app.getIconFile() );
             }
             app.setId( appId );
