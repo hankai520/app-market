@@ -38,14 +38,14 @@
                 <c:choose>
                     <c:when test="${ not empty apps }">
                         <c:forEach items="${ apps }" var="app">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6">
+                            <div class="col-lg-3 col-md-2 col-xs-1"></div>
+                            <div class="col-lg-6 col-md-8 col-xs-10">
                                 <div class="panel panel-blue panel-widget ">
                                     <div class="row text-left">
-                                        <div class="col-sm-4 col-lg-4">
+                                        <div class="col-xs-4 col-md-3 col-lg-4">
                                             <img class="img-responsive" src="${ app.smallImageUrl }" />
                                         </div>
-                                        <div class="col-sm-8 col-lg-8 ">
+                                        <div class="col-xs-8 col-md-9 col-lg-8">
                                             <c:set var="packageUrl" value="#" />
                                             <c:choose>
                                                 <c:when test="${ app.platform.name() eq 'iOS' }">
@@ -54,7 +54,7 @@
                                                     value="itms-services://?action=download-manifest&url=${ ctx }api/app/${ app.id }/ios_manifest.plist" />
                                                 </c:when>
                                                 <c:when test="${ app.platform.name() eq 'Android' }">
-                                                    <c:set var="packageUrl" value="${ app.packageUrl }" />
+                                                    <c:set var="packageUrl" value="${ ctx }/api/app/${ app.id }/package.apk" />
                                                 </c:when>
                                             </c:choose>
                                             <h2><a href="${ packageUrl }">${ app.name }</a></h2>
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3"></div>
+                            <div class="col-lg-3 col-md-2 col-xs-1"></div>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
