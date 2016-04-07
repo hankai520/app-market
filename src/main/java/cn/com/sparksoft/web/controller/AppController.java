@@ -112,17 +112,17 @@ public class AppController {
         if ( app.getPackageFile() == null ) {
             br.rejectValue( "packageFile", "NotNull.app.packageFile" );
         }
+        if ( app.getIconFile() == null ) {
+            br.rejectValue( "packageFile", "NotNull.app.iconFile" );
+        }
         if ( br.hasErrors() ) {
             mav.addObject( "app", app );
         } else {
             try {
                 app.setCreateTime( new Date() );
                 appService.save( app );
-                boolean saveResult = appService.saveAppPackage( app.getId(), app.getPlatform(),
-                    app.getPackageFile() );
-                if ( !saveResult ) {
-                    br.rejectValue( "packageFile", "Error.app.packageFile" );
-                }
+                appService.saveAppPackage( app.getId(), app.getPlatform(), app.getPackageFile() );
+                appService.saveAppIcon( app.getId(), app.getPlatform(), app.getIconFile() );
                 mav.addObject( WebConfig.WEB_PAGE_MESSAGE,
                     messageSource.getMessage( "operation.success", null, null ) );
                 mav.addObject( "app", new App() );
@@ -161,11 +161,10 @@ public class AppController {
             mav.setViewName( "redirect:/404.html" );
         } else {
             if ( app.getPackageFile() != null ) {
-                boolean saveResult = appService.saveAppPackage( appId, app.getPlatform(),
-                    app.getPackageFile() );
-                if ( !saveResult ) {
-                    br.rejectValue( "packageFile", "Error.app.packageFile" );
-                }
+                appService.saveAppPackage( appId, app.getPlatform(), app.getPackageFile() );
+            }
+            if ( app.getIconFile() != null ) {
+                appService.saveAppIcon( appId, app.getPlatform(), app.getIconFile() );
             }
             app.setId( appId );
             if ( !br.hasErrors() ) {
@@ -195,6 +194,7 @@ public class AppController {
             mav.setViewName( "redirect:/404.html" );
         } else {
             appService.deleteById( appId );
+            appService.deleteRelatedFiles( appId, app.getPlatform() );
         }
         return mav;
     }

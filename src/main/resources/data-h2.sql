@@ -5,10 +5,9 @@
 
 -- 插入测试应用信息
 INSERT INTO PUBLIC.APPS 
-    (ID, NAME, SMALLIMAGEURL, LARGEIMAGEURL, VERSION, CREATETIME, STATUS, PLATFORM, BUNDLEIDENTIFIER)
+    (ID, NAME, VERSION, CREATETIME, STATUS, PLATFORM, BUNDLEIDENTIFIER)
 SELECT * FROM (
-SELECT 1, 'demo', 'http://www.baidu.com/small.png', 'http://www.baidu.com/large.png', 
-'1.0.0', '2016-03-15 15:14:21', 1 as c7, 0, 'cn.com.sparksoft.zjsc'
+SELECT 1, 'demo', '1.0.0', '2016-03-15 15:14:21', 1 as c7, 0, 'cn.com.sparksoft.zjsc'
 ) WHERE NOT EXISTS(SELECT * FROM PUBLIC.APPS);
 
 -- 新建默认管理员账号（17761748443, 123456）

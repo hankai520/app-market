@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -63,17 +64,15 @@ public class AppService extends JpaBasedService<App> {
      * @author hankai
      * @since Apr 6, 2016 2:32:12 PM
      */
-    public boolean saveAppPackage( Integer appId, AppPlatform platform,
+    public void saveAppPackage( Integer appId, AppPlatform platform,
                     MultipartFile packageFile ) {
         try {
             String path = getAppPackagePath( appId, platform );
             FileOutputStream fos = new FileOutputStream( path );
             FileCopyUtils.copy( packageFile.getInputStream(), fos );
-            return true;
         } catch (IOException e) {
             logger.error(
                 String.format( "Failed to save app package for app with id \"%d\"", appId ), e );
-            return false;
         }
     }
 
@@ -91,5 +90,63 @@ public class AppService extends JpaBasedService<App> {
         String fileName = String.format( "app_%d_%d.%s", appId, platform.value(), suffix );
         String path = String.format( "%s/%s", Preferences.getAttachmentDir(), fileName );
         return path;
+    }
+
+    /**
+     * 保存应用图标
+     *
+     * @param appId 应用ID
+     * @param platform 运行平台
+     * @param iconFile 图标
+     * @return 是否成功
+     * @author hankai
+     * @since Apr 7, 2016 5:54:39 PM
+     */
+    public void saveAppIcon( Integer appId, AppPlatform platform,
+                    MultipartFile iconFile ) {
+        try {
+            String path = getAppIconPath( appId, platform );
+            FileOutputStream fos = new FileOutputStream( path );
+            FileCopyUtils.copy( iconFile.getInputStream(), fos );
+        } catch (IOException e) {
+            logger.error(
+                String.format( "Failed to save app icon for app with id \"%d\"", appId ), e );
+        }
+    }
+
+    /**
+     * 获取应用图标文件路径
+     *
+     * @param appId 应用ID
+     * @param platform 运行平台
+     * @return 文件路径
+     * @author hankai
+     * @since Apr 7, 2016 5:54:08 PM
+     */
+    public String getAppIconPath( Integer appId, AppPlatform platform ) {
+        String fileName = String.format( "app_%d_%d.icon", appId, platform.value() );
+        String path = String.format( "%s/%s", Preferences.getAttachmentDir(), fileName );
+        return path;
+    }
+
+    /**
+     * 删除应用相关的磁盘文件（程序包，图标）
+     * 
+     * @param appId 应用ID
+     * @param platform 运行平台
+     * @author hankai
+     * @since Apr 7, 2016 6:05:01 PM
+     */
+    public void deleteRelatedFiles( Integer appId, AppPlatform platform ) {
+        String path = getAppIconPath( appId, platform );
+        File f = new File( path );
+        if ( f.exists() ) {
+            f.delete();
+        }
+        path = getAppPackagePath( appId, platform );
+        f = new File( path );
+        if ( f.exists() ) {
+            f.delete();
+        }
     }
 }

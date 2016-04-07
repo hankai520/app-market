@@ -62,25 +62,10 @@ public class App implements Serializable {
         max = 100 )
     private String            bundleIdentifier;
     /**
-     * 应用图标 URL（小图片）
+     * 程序图标
      */
-    @Column(
-        length = 1000,
-        nullable = false )
-    @Size(
-        min = 1,
-        max = 400 )
-    private String            smallImageUrl;
-    /**
-     * 应用图标 URL（大图片）
-     */
-    @Column(
-        length = 1000,
-        nullable = false )
-    @Size(
-        min = 1,
-        max = 400 )
-    private String            largeImageUrl;
+    @Transient
+    private MultipartFile     iconFile;
     /**
      * 程序包文件
      */
@@ -150,20 +135,12 @@ public class App implements Serializable {
         this.bundleIdentifier = bundleIdentifier;
     }
 
-    public String getSmallImageUrl() {
-        return smallImageUrl;
+    public MultipartFile getIconFile() {
+        return iconFile;
     }
 
-    public void setSmallImageUrl( String smallImageUrl ) {
-        this.smallImageUrl = smallImageUrl;
-    }
-
-    public String getLargeImageUrl() {
-        return largeImageUrl;
-    }
-
-    public void setLargeImageUrl( String largeImageUrl ) {
-        this.largeImageUrl = largeImageUrl;
+    public void setIconFile( MultipartFile iconFile ) {
+        this.iconFile = iconFile;
     }
 
     public MultipartFile getPackageFile() {

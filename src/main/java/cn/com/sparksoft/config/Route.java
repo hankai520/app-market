@@ -26,6 +26,10 @@ public final class Route {
     public static final String  API_IOS_MANIFEST        =
                                                  API_PREFIX + "/app/{appId}/ios_manifest.plist";
     /**
+     * 应用图标下载
+     */
+    public static final String  API_APP_ICON            = API_PREFIX + "/app/{appId}/icon";
+    /**
      * ios app 程序包下载
      */
     public static final String  API_APP_IOS_PACKAGE     = API_PREFIX + "/app/{appId}/package.ipa";

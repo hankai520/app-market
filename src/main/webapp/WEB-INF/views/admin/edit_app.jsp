@@ -77,14 +77,9 @@
                                     <form:errors cssClass="field-error" path="bundleIdentifier" />
                                 </div>
                                 <div class="form-group">
-                                    <label>小图标 URL <span class="fg-red">*</span></label>
-                                    <form:input path="smallImageUrl" cssClass="form-control" maxlength="200" placeholder="最大长度200个字符，如：http://apps.sparksoft.com.cn/small.png" />
-                                    <form:errors cssClass="field-error" path="smallImageUrl" />
-                                </div>
-                                <div class="form-group">
-                                    <label>大图标 URL <span class="fg-red">*</span></label>
-                                    <form:input path="largeImageUrl" cssClass="form-control" maxlength="200" placeholder="最大长度200个字符，如：http://apps.sparksoft.com.cn/large.png" />
-                                    <form:errors cssClass="field-error" path="largeImageUrl" />
+                                    <label>图标 <span class="fg-red">*</span></label>
+                                    <form:input path="iconFile" type="file" cssClass="form-control"/>
+                                    <form:errors cssClass="field-error" path="iconFile" />
                                 </div>
                                 <div class="form-group">
                                     <label>安装包 </label>

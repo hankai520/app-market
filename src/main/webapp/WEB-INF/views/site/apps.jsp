@@ -43,7 +43,7 @@
                                 <div class="panel panel-blue panel-widget ">
                                     <div class="row text-left">
                                         <div class="col-xs-4 col-md-3 col-lg-4">
-                                            <img class="img-responsive" src="${ app.smallImageUrl }" />
+                                            <img class="img-responsive" src="api/app/${ app.id }/icon" />
                                         </div>
                                         <div class="col-xs-8 col-md-9 col-lg-8">
                                             <c:set var="packageUrl" value="#" />
