@@ -109,11 +109,6 @@ public class AppController {
                     @ModelAttribute( "app" ) @Valid App app,
                     BindingResult br ) {
         ModelAndView mav = new ModelAndView( "add_app" );
-        App existApp = jpaUtil.findUniqueBy( App.class, "bundleIdentifier",
-            app.getBundleIdentifier() );
-        if ( existApp != null ) {
-            br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
-        }
         if ( app.getPackageFile() == null ) {
             br.rejectValue( "packageFile", "NotNull.app.packageFile" );
         }
@@ -165,11 +160,6 @@ public class AppController {
         if ( localApp == null ) {
             mav.setViewName( "redirect:/404.html" );
         } else {
-            App existApp = jpaUtil.findUniqueBy( App.class, "bundleIdentifier",
-                app.getBundleIdentifier() );
-            if ( ( existApp != null ) && !existApp.getId().equals( appId ) ) {
-                br.rejectValue( "bundleIdentifier", "Duplicate.app.bundleIdentifier" );
-            }
             if ( app.getPackageFile() != null ) {
                 boolean saveResult = appService.saveAppPackage( appId, app.getPlatform(),
                     app.getPackageFile() );

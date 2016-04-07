@@ -34,6 +34,11 @@
                         return '<a href="admin/apps/' + row.id + '/edit">' + value + '</a>';
                     }
                 }, {
+                    field: 'platformDesc',
+                    title: '平台',
+                    valign: 'middle',
+                    sortable: 'false'
+                }, {
                     field: 'version',
                     title: '版本',
                     valign: 'middle',
@@ -41,11 +46,6 @@
                 }, {
                     field: 'bundleIdentifier',
                     title: '程序包ID',
-                    valign: 'middle',
-                    sortable: 'false'
-                }, {
-                    field: 'platformDesc',
-                    title: '平台',
                     valign: 'middle',
                     sortable: 'false'
                 }, {

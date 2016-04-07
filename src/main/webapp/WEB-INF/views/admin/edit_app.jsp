@@ -64,6 +64,14 @@
                                     <form:errors cssClass="field-error" path="name" />
                                 </div>
                                 <div class="form-group">
+                                    <label>运行平台 <span class="fg-red">*</span></label>
+                                    <form:select path="platform" cssClass="form-control">
+                                        <form:option value="iOS"><fmt:message key="app.platform.iOS" /></form:option>
+                                        <form:option value="Android"><fmt:message key="app.platform.Android" /></form:option>
+                                    </form:select>
+                                    <form:errors cssClass="field-error" path="platform" />
+                                </div>
+                                <div class="form-group">
                                     <label>应用包ID <span class="fg-red">*</span></label>
                                     <form:input path="bundleIdentifier" cssClass="form-control" maxlength="50" placeholder="最大长度50个字符，如：cn.com.sparksoft.zjsc" />
                                     <form:errors cssClass="field-error" path="bundleIdentifier" />
@@ -87,14 +95,6 @@
                                     <label>版本号 <span class="fg-red">*</span></label>
                                     <form:input path="version" cssClass="form-control" maxlength="200" placeholder="最大长度200个字符，如：1.2.3" />
                                     <form:errors cssClass="field-error" path="version" />
-                                </div>
-                                <div class="form-group">
-                                    <label>运行平台 <span class="fg-red">*</span></label>
-                                    <form:select path="platform" cssClass="form-control">
-                                        <form:option value="iOS"><fmt:message key="app.platform.iOS" /></form:option>
-                                        <form:option value="Android"><fmt:message key="app.platform.Android" /></form:option>
-                                    </form:select>
-                                    <form:errors cssClass="field-error" path="platform" />
                                 </div>
                                 <div class="form-group">
                                     <label>状态 <span class="fg-red">*</span></label>
