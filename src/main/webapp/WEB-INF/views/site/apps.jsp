@@ -34,10 +34,10 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <div class="row fluid text-center">
-                <c:choose>
-                    <c:when test="${ not empty apps }">
-                        <c:forEach items="${ apps }" var="app">
+            <c:choose>
+                <c:when test="${ not empty apps }">
+                    <c:forEach items="${ apps }" var="app">
+                        <div class="row text-center">
                             <div class="col-lg-3 col-md-2 col-xs-1"></div>
                             <div class="col-lg-6 col-md-8 col-xs-10">
                                 <div class="panel panel-blue panel-widget ">
@@ -64,13 +64,13 @@
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-2 col-xs-1"></div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        应用即将上线，敬请期待！
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                            </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    应用即将上线，敬请期待！
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="col-md-2"></div>
     </div>
