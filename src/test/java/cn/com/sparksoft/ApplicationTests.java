@@ -14,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import cn.com.sparksoft.persist.model.App;
 import cn.com.sparksoft.persist.util.JpaServiceUtil;
+import cn.com.sparksoft.util.MobileAppScanner;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @SpringApplicationConfiguration(
@@ -27,6 +28,8 @@ public abstract class ApplicationTests {
     protected MockMvc               mockMvc;
     @Autowired
     protected JpaServiceUtil        jpaServiceUtil;
+    @Autowired
+    protected MobileAppScanner      appScanner;
 
     @Before
     public void setUpMVC() {

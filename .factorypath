@@ -94,9 +94,5 @@
     <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/oro/oro/2.0.8/5592374f834645c4ae250f4c9fbb314c9369d698/oro-2.0.8.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/sslext/sslext/1.2-0/c86a7db4ac0bc450e675f3d44b3d64cdc934361b/sslext-1.2-0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/xml-apis/xml-apis/1.0.b2/3136ca936f64c9d68529f048c2618bd356bf85c9/xml-apis-1.0.b2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-mail/1.2.5.RELEASE/bcf2b16ecd9827606fdfc68e9ec483c3b8d193d5/spring-boot-starter-mail-1.2.5.RELEASE.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.35/b6ac941b7288376a7e8bc6490264bbd4427fb94e/mysql-connector-java-5.1.35.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/com.sun.mail/javax.mail/1.5.4/2dd6b709ca0d35853a6061c83434a9b94533b877/javax.mail-1.5.4.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="/Users/hankai/.gradle/caches/modules-2/files-2.1/javax.activation/activation/1.1/e6cb541461c2834bdea3eb920f1884d1eb508b50/activation-1.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
 </factorypath>

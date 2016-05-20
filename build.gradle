@@ -3,8 +3,7 @@ buildscript {
         springBootVersion = '1.2.5.RELEASE'
     }
     repositories {
-        // maven { url "http://192.168.1.15/content/groups/public" }
-        mavenCentral()
+        maven { url "http://192.168.1.15/content/groups/public" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
@@ -30,12 +29,12 @@ war {
     baseName = 'app-market'
     version = '0.0.1'
 }
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-    // maven { url "http://192.168.1.15/content/groups/public" }
-    mavenCentral()
+    maven { url "http://192.168.1.15/content/groups/public" }
 }
 
 configurations {
