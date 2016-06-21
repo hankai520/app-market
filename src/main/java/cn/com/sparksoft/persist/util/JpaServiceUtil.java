@@ -24,7 +24,7 @@ import javax.persistence.criteria.Root;
 
 /**
  * JPA助手类。
- * 
+ *
  * @author hankai
  * @version 1.0
  * @since Jul 14, 2015 12:38:04 PM
@@ -37,7 +37,7 @@ public class JpaServiceUtil {
 
     /**
      * Get the total number of records of specific entity.
-     * 
+     *
      * @param clazz entity class
      * @return number of entities.
      */
@@ -50,7 +50,7 @@ public class JpaServiceUtil {
 
     /**
      * Delete all instances of specific class.
-     * 
+     *
      * @param clazz the instance class.
      * @return how many instances affected.
      */
@@ -63,7 +63,7 @@ public class JpaServiceUtil {
 
     /**
      * Find the unique instance of a class with the unique identifier.
-     * 
+     *
      * @param clazz the instance class
      * @return the instance.
      */
@@ -77,7 +77,7 @@ public class JpaServiceUtil {
 
     /**
      * Find entities with pagination support.
-     * 
+     *
      * @param clazz the Class of the entity
      * @param predicateBuilder the predicate used to query entities.
      * @param offset pagination offset
@@ -99,9 +99,6 @@ public class JpaServiceUtil {
         }
         if ( predicate != null ) {
             cq1.where( predicate );
-        }
-        if ( ( orderBys != null ) && ( orderBys.size() > 0 ) ) {
-            cq1.orderBy( orderBys );
         }
         PaginatedResult<T> result = new PaginatedResult<T>();
         TypedQuery<Long> q1 = entityManager.createQuery( cq1 );
@@ -130,7 +127,7 @@ public class JpaServiceUtil {
 
     /**
      * The override version of findAll. Find entities without predicates.
-     * 
+     *
      * @param clazz the entity class
      * @param offset pagination offset (inclusive)
      * @param count max number of results returned.
@@ -145,7 +142,7 @@ public class JpaServiceUtil {
 
     /**
      * Find entity by specific field with an unique value.
-     * 
+     *
      * @return the entity found
      * @author hankai
      * @version 1.0.0
@@ -159,8 +156,8 @@ public class JpaServiceUtil {
         Predicate pre = null;
         if ( ( fieldValue instanceof String ) && !caseSensitive ) {
             pre =
-                  cb.equal( cb.lower( root.<String>get( fieldName ) ),
-                      ( (String) fieldValue ).toLowerCase() );
+                cb.equal( cb.lower( root.<String>get( fieldName ) ),
+                    ( (String) fieldValue ).toLowerCase() );
         } else {
             pre = cb.equal( root.get( fieldName ), fieldValue );
         }
@@ -181,7 +178,7 @@ public class JpaServiceUtil {
 
     /**
      * Find specific entity with unique field value.
-     * 
+     *
      * @param clazz the entity class
      * @param fieldName the field name (the member variable name of entity class)
      * @param fieldValue the field value (must be unique)
