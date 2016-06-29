@@ -49,7 +49,8 @@ public class AppService extends JpaBasedService<App> {
      */
     public List<App> getAvailableApps() {
         TypedQuery<App> q = jpaServiceUtil.getEntityManager()
-            .createQuery( "select o from App o where o.status=:status", App.class );
+            .createQuery( "select o from App o where o.status=:status order by o.id desc",
+                App.class );
         q.setParameter( "status", AppStatus.ReadyToSale );
         return q.getResultList();
     }
@@ -131,7 +132,7 @@ public class AppService extends JpaBasedService<App> {
 
     /**
      * 删除应用相关的磁盘文件（程序包，图标）
-     * 
+     *
      * @param appId 应用ID
      * @param platform 运行平台
      * @author hankai
