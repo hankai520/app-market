@@ -39,9 +39,9 @@ public class ContainerConfig implements EmbeddedServletContainerCustomizer {
                                                      (TomcatEmbeddedServletContainerFactory) container;
             cf.addConnectorCustomizers( connectorConfig );
             RemoteIpValve riv = new RemoteIpValve();
-            riv.setRemoteIpHeader( "x-forwarded-for" );
-            riv.setProxiesHeader( "x-forwarded-by" );
-            riv.setProtocolHeader( "x-forwarded-proto" );
+            riv.setRemoteIpHeader( "X-Forwarded-For" );
+            riv.setProxiesHeader( "X-Forwarded-By" );
+            riv.setProtocolHeader( "X-Forwarded-Proto" );
             cf.addContextValves( riv );
         }
     }
