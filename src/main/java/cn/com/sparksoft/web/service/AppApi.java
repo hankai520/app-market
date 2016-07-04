@@ -116,4 +116,16 @@ public class AppApi {
             return new ResponseEntity<String>( HttpStatus.NOT_FOUND );
         }
     }
+
+    @RequestMapping(
+        value = Route.API_APP_METADATA,
+        produces = { MediaType.TEXT_PLAIN_VALUE } )
+    public ResponseEntity<String> getAppMetaData( @PathVariable( "appId" ) Integer appId ) {
+        App app = appService.find( appId );
+        if ( app != null ) {
+            return new ResponseEntity<String>( app.getMetaData(), HttpStatus.OK );
+        } else {
+            return new ResponseEntity<String>( HttpStatus.NOT_FOUND );
+        }
+    }
 }

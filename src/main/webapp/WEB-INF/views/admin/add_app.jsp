@@ -84,6 +84,11 @@
                                     <form:errors cssClass="field-error" path="version" />
                                 </div>
                                 <div class="form-group">
+                                    <label>配置信息 </label>
+                                    <form:textarea path="metaData" rows="8" cssClass="form-control" maxlength="800" placeholder="APP 配置信息，如 XML/JSON 格式的标记信息" />
+                                    <form:errors cssClass="field-error" path="metaData" />
+                                </div>
+                                <div class="form-group">
                                     <label>状态 <span class="fg-red">*</span></label>
                                     <form:select path="status" cssClass="form-control">
                                         <form:option value="Developing"><fmt:message key="app.status.Developing" /></form:option>

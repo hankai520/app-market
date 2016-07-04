@@ -104,6 +104,7 @@ public class UserController {
             }
             if ( br.hasErrors() ) {
                 mav.addObject( "user", user );
+                mav.setViewName( Route.BG_LOGIN );
             } else {
                 String url = getUserLastAccessedUrl( session );
                 if ( !StringUtils.isEmpty( url ) ) {

@@ -73,7 +73,8 @@ public class AppController {
                     @RequestParam( "offset" ) int offset ) {
         PaginatedList response = null;
         try {
-            PaginatedResult<App> result = appService.findAll( 0, -1 );
+            boolean asc = "asc".equalsIgnoreCase( order );
+            PaginatedResult<App> result = appService.getAllApps( search, sort, asc, offset, limit );
             if ( ( result != null ) && ( result.getObjects() != null ) ) {
                 for ( App app : result.getObjects() ) {
                     String str = messageSource.getMessage( app.getStatus().i18nKey(), null, null );

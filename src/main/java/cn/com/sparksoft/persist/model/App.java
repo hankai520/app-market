@@ -110,6 +110,12 @@ public class App implements Serializable {
      */
     @Transient
     private String            platformDesc;
+    @Column(
+        length = 1000 )
+    @Size(
+        min = 0,
+        max = 800 )
+    private String            metaData;
 
     public Integer getId() {
         return id;
@@ -205,6 +211,14 @@ public class App implements Serializable {
 
     public void setPlatformDesc( String platformDesc ) {
         this.platformDesc = platformDesc;
+    }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData( String metaData ) {
+        this.metaData = metaData;
     }
 
     public static long getSerialversionuid() {

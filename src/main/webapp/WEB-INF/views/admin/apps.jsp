@@ -49,6 +49,13 @@
                     valign: 'middle',
                     sortable: 'false'
                 }, {
+                    title: 'Meta-Data',
+                    valign: 'middle',
+                    sortable: 'false',
+                    formatter: function (value, row, index) {
+                        return '<a href="/api/app/' + row.id + '/metadata" target="_blank">调用接口</a>';
+                    }
+                }, {
                     field: 'statusDesc',
                     title: '状态',
                     valign: 'middle',

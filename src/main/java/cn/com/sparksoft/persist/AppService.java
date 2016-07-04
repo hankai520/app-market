@@ -10,19 +10,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import cn.com.sparksoft.Preferences;
 import cn.com.sparksoft.persist.model.App;
 import cn.com.sparksoft.persist.model.AppPlatform;
 import cn.com.sparksoft.persist.model.AppStatus;
+import cn.com.sparksoft.persist.util.CriteriaQueryBuilder;
+import cn.com.sparksoft.persist.util.PaginatedResult;
 
 /**
  * 应用信息业务
@@ -53,6 +61,50 @@ public class AppService extends JpaBasedService<App> {
                 App.class );
         q.setParameter( "status", AppStatus.ReadyToSale );
         return q.getResultList();
+    }
+
+    /**
+     * 查找所有APP
+     *
+     * @param keyword 关键字
+     * @param sort 排序字段
+     * @param asc 升序/降序
+     * @param offset 结果集位置
+     * @param limit 记录数
+     * @return APP列表
+     * @author hankai
+     * @since Jul 4, 2016 1:41:17 PM
+     */
+    public PaginatedResult<App> getAllApps( final String keyword, final String sort,
+                    final Boolean asc, int offset, int limit ) {
+        return jpaServiceUtil.findAll( App.class, new CriteriaQueryBuilder() {
+
+            @Override
+            public List<Order> getOrderBys( CriteriaBuilder cb, Root<?> root ) {
+                List<Order> orders = new ArrayList<>();
+                if ( !StringUtils.isEmpty( sort ) && ( asc != null ) ) {
+                    if ( asc ) {
+                        orders.add( cb.asc( root.get( sort ) ) );
+                    } else {
+                        orders.add( cb.desc( root.get( sort ) ) );
+                    }
+                }
+                orders.add( cb.asc( root.get( "id" ) ) );
+                return orders;
+            }
+
+            @Override
+            public Predicate buildPredicate( CriteriaBuilder cb, Root<?> root ) {
+                String fuzzyKeyword = "%" + keyword + "%";
+                Predicate pre = null;
+                if ( !StringUtils.isEmpty( keyword ) ) {
+                    pre = cb.or(
+                        cb.like( root.<String>get( "name" ), fuzzyKeyword ),
+                        cb.like( root.<String>get( "bundleIdentifier" ), fuzzyKeyword ) );
+                }
+                return pre;
+            }
+        }, offset, limit );
     }
 
     /**
