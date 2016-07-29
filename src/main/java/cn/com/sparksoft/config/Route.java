@@ -24,6 +24,7 @@ public final class Route {
     public static final String  API_APP_METADATA        = API_PREFIX + "/app/{appId}/metadata";
     public static final String  BACKGROUND_PREFIX       = "/admin";
     public static final String  BG_LOGIN                = BACKGROUND_PREFIX + "/login";
+    public static final String  BG_LOGOUT               = BACKGROUND_PREFIX + "/logout";
     public static final String  BG_APPS                 = BACKGROUND_PREFIX + "/apps";
     public static final String  BG_AJAX_APPS            = BACKGROUND_PREFIX + "/apps.json";
     public static final String  BG_APP_ADD              = BACKGROUND_PREFIX + "/apps/add";

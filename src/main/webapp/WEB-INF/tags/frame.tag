@@ -55,12 +55,10 @@
                 <a class="navbar-brand" href="admin"><span>星网</span> 移动应用市场</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user"></span> ${ current_user.mobile } <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>个人资料</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span>设置</a></li>
                             <li><a href="admin/logout"><span class="glyphicon glyphicon-log-out"></span>退出</a></li>
                         </ul>
                     </li>
@@ -83,7 +81,7 @@
             </li>
             <li role="presentation" class="divider"></li>
             <li id="miUsers">
-                <a href="#"><span class="glyphicon glyphicon-cog"></span>用户管理</a>
+                <a href="javascript:;"><span class="glyphicon glyphicon-cog"></span>用户管理</a>
             </li>
         </ul>
         <div class="attribution"><a href="http://www.sparksoft.com.cn" target="_blank">© 2015 江苏星网软件有限公司</a></div>

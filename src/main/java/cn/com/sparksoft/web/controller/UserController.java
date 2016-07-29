@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import cn.com.sparksoft.config.Route;
 import cn.com.sparksoft.config.WebConfig;
 import cn.com.sparksoft.persist.model.User;
+import cn.com.sparksoft.persist.model.UserRole;
 import cn.com.sparksoft.persist.util.JpaServiceUtil;
 import cn.com.sparksoft.web.payload.UserViewModel;
 
@@ -95,6 +96,8 @@ public class UserController {
                     br.rejectValue( "loginId", "admin.login.account.not.found" );
                 } else if ( !user.getPassword().equalsIgnoreCase( localUser.getPassword() ) ) {
                     br.rejectValue( "password", "admin.login.password.invalid" );
+                } else if ( localUser.getRole() != UserRole.Operator ) {
+                    br.rejectValue( "loginId", "admin.login.account.role.invalid" );
                 } else {
                     session.setAttribute( WebConfig.SESSION_KEY_USER, localUser );
                     if ( ( user.getRemember() != null ) && user.getRemember() ) {
@@ -104,7 +107,7 @@ public class UserController {
             }
             if ( br.hasErrors() ) {
                 mav.addObject( "user", user );
-                mav.setViewName( Route.BG_LOGIN );
+                mav.setViewName( "login" );
             } else {
                 String url = getUserLastAccessedUrl( session );
                 if ( !StringUtils.isEmpty( url ) ) {
@@ -114,6 +117,19 @@ public class UserController {
                 }
             }
         }
+        return mav;
+    }
+
+    @RequestMapping( Route.BG_LOGOUT )
+    public ModelAndView logout( HttpSession session, HttpServletResponse response ) {
+        ModelAndView mav = new ModelAndView( "redirect:" + Route.BG_LOGIN );
+        session.invalidate();
+        Cookie cookie = new Cookie( WebConfig.COOKIE_KEY_LOGIN_ID, "" );
+        cookie.setMaxAge( 0 );
+        response.addCookie( cookie );
+        cookie = new Cookie( WebConfig.COOKIE_KEY_PASSWORD, "" );
+        cookie.setMaxAge( 0 );
+        response.addCookie( cookie );
         return mav;
     }
 }
