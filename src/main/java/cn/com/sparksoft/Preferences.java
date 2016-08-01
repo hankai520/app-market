@@ -1,12 +1,7 @@
-/*
- * Copyright © 2015 Jiangsu Sparknet Software Co., Ltd. All rights reserved
- *
- * http://www.sparksoft.com.cn
- */
 
 package cn.com.sparksoft;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 
@@ -15,7 +10,7 @@ import java.io.File;
  *
  * @author hankai
  * @version 1.0.0
- * @since Jul 14, 2015 12:17:22 AM
+ * @since Jun 21, 2016 12:54:36 PM
  */
 public class Preferences {
 
@@ -32,6 +27,22 @@ public class Preferences {
      */
     public static final String PROFILE_PRODUCTION = "prod";
     /**
+     * 启用 H2 数据库
+     */
+    public static final String PROFILE_H2         = "h2";
+    /**
+     * 启用 HSQL 数据库
+     */
+    public static final String PROFILE_HSQL       = "hsql";
+    /**
+     * 启用 MySQL 数据库
+     */
+    public static final String PROFILE_MYSQL      = "mysql";
+    /**
+     * 启用 Oracle 数据库
+     */
+    public static final String PROFILE_ORACLE     = "oracle";
+    /**
      * 命令行参数：程序数据根目录
      */
     public static final String ENV_APP_HOME_DIR   = "HOME_DIR";
@@ -41,7 +52,7 @@ public class Preferences {
      */
     public static final String DATA_SEPARATOR     = ",";
     /**
-     * 程序默认数据根目录
+     * 程序默认数据根目录（此默认名称用于提示开发者环境变量缺失）
      */
     public static final String DEFUALT_HOME       = "home-not-set";
 
@@ -93,13 +104,29 @@ public class Preferences {
     }
 
     /**
-     * 获取程序数据库配置文件路径
+     * 获取默认的数据库配置文件路径
      *
+     * @return 配置文件路径
      * @author hankai
-     * @since Jul 28, 2015 10:53:28 AM
+     * @since Jun 21, 2016 11:21:50 AM
      */
     public static String getDbConfigFile() {
-        return getConfigDir() + File.separator + "database.properties";
+        return getDbConfigFile( null );
+    }
+
+    /**
+     * 获取指定数据库配置文件路径
+     *
+     * @param fileName 数据库配置文件名
+     * @return 配置文件路径
+     * @author hankai
+     * @since Jun 21, 2016 11:21:15 AM
+     */
+    public static String getDbConfigFile( String fileName ) {
+        if ( StringUtils.isEmpty( fileName ) ) {
+            fileName = "database.properties";
+        }
+        return getConfigDir() + File.separator + fileName;
     }
 
     /**
