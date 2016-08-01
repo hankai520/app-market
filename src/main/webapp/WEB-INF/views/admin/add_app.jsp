@@ -64,24 +64,9 @@
                                     <form:errors cssClass="field-error" path="platform" />
                                 </div>
                                 <div class="form-group">
-                                    <label>应用包ID <span class="fg-red">*</span></label>
-                                    <form:input path="bundleIdentifier" cssClass="form-control" maxlength="50" placeholder="最大长度50个字符，如：cn.com.sparksoft.zjsc" />
-                                    <form:errors cssClass="field-error" path="bundleIdentifier" />
-                                </div>
-                                <div class="form-group">
-                                    <label>图标 <span class="fg-red">*</span></label>
-                                    <form:input path="iconFile" type="file" cssClass="form-control"/>
-                                    <form:errors cssClass="field-error" path="iconFile" />
-                                </div>
-                                <div class="form-group">
                                     <label>安装包 <span class="fg-red">*</span></label>
                                     <form:input path="packageFile" type="file" cssClass="form-control"/>
                                     <form:errors cssClass="field-error" path="packageFile" />
-                                </div>
-                                <div class="form-group">
-                                    <label>版本号 <span class="fg-red">*</span></label>
-                                    <form:input path="version" cssClass="form-control" maxlength="200" placeholder="最大长度200个字符，如：1.2.3" />
-                                    <form:errors cssClass="field-error" path="version" />
                                 </div>
                                 <div class="form-group">
                                     <label>配置信息 </label>

@@ -1,0 +1,8 @@
+# 系统运行时参数配置文件
+
+# 系统秘钥
+systemSk: 46ee56cd32f85737
+# 数据传输秘钥
+transferKey: 8541ae1088e8f0cd5323503d57403d5b
+# API 鉴权码有效时长
+apiAccessTokenExpiry: 7

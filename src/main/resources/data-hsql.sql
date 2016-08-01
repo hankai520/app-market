@@ -11,12 +11,3 @@ MERGE INTO PUBLIC.USERS t
   AS vals(c1,c2,c3,c4,c5) ON t.MOBILE = vals.c1
   WHEN NOT MATCHED THEN
     INSERT (MOBILE,PASSWORD,CREATETIME,STATUS,ROLE) VALUES (vals.c1,vals.c2,vals.c3,vals.c4,vals.c5);
-
-    
--- 插入测试应用信息
-MERGE INTO PUBLIC.APPS t
-  USING ( VALUES
-            ('demo', '1.0.0', '2016-03-15 15:14:21', 1, 0, 'cn.com.sparksoft.zjsc'))
-  AS vals(c1,c2,c3,c4,c5,c6) ON t.BUNDLEIDENTIFIER = vals.c6
-  WHEN NOT MATCHED THEN
-    INSERT (NAME, VERSION, CREATETIME, STATUS, PLATFORM, BUNDLEIDENTIFIER) VALUES (vals.c1,vals.c2,vals.c3,vals.c4,vals.c5,vals.c6);

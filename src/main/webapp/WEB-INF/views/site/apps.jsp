@@ -21,6 +21,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
 <link href="css/styles.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
 
 <!--[if lt IE 9]>
 <script src="js/html5shiv.js"></script>
@@ -30,7 +31,7 @@
 </head>
 
 <body>
-    <h2 class="text-center">星网移动应用市场</h2>
+    <h2 class="text-center">星网应用市场</h2>
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -43,7 +44,7 @@
                                 <div class="panel panel-blue panel-widget ">
                                     <div class="row text-left">
                                         <div class="col-xs-4 col-md-3 col-lg-4">
-                                            <img class="img-responsive" src="api/app/${ app.id }/icon" />
+                                            <img class="img-responsive app-icon" src="api/app/${ app.id }/icon" />
                                         </div>
                                         <div class="col-xs-8 col-md-9 col-lg-8">
                                             <c:set var="packageUrl" value="#" />
@@ -68,7 +69,7 @@
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
-                    应用即将上线，敬请期待！
+                    <p class="text-center">应用即将上线，敬请期待！</p>
                 </c:otherwise>
             </c:choose>
         </div>
