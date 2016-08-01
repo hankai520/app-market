@@ -81,6 +81,8 @@ public class AppController {
                     app.setStatusDesc( str );
                     str = messageSource.getMessage( app.getPlatform().i18nKey(), null, null );
                     app.setPlatformDesc( str );
+                    app.setBundle( null );
+                    app.setIcon( null );
                 }
             }
             response = new PaginatedList();
