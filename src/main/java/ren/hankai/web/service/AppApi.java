@@ -16,10 +16,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +33,9 @@ import javax.servlet.http.HttpServletRequest;
 import ren.hankai.config.Route;
 import ren.hankai.persist.AppService;
 import ren.hankai.persist.model.App;
+import ren.hankai.persist.model.AppPlatform;
 import ren.hankai.persist.util.JpaServiceUtil;
+import ren.hankai.util.MobileAppInfo;
 import ren.hankai.web.payload.ApiCode;
 import ren.hankai.web.payload.ApiResponse;
 import ren.hankai.web.payload.BusinessError;
@@ -128,5 +135,43 @@ public class AppApi {
             logger.error( Route.API_APP_METADATA, e );
         }
         return response;
+    }
+
+    @RequestMapping(
+        value = Route.API_UPDATE_APP )
+    public ResponseEntity<String> updateApp( @PathVariable( "sku" ) String sku,
+                    @RequestPart( "package" ) MultipartFile file ) {
+        try {
+            App app = jpaUtil.findUniqueBy( App.class, "sku", sku );
+            if ( app != null ) {
+                if ( ( file != null ) && ( file.getSize() > 0 )
+                    && file.getOriginalFilename().matches( "(?i)^.*(\\.ipa|\\.apk)$" ) ) {
+                    String[] parts = file.getOriginalFilename().toLowerCase().split( "\\." );
+                    String ext = parts[parts.length - 1];
+                    AppPlatform platform = ext.equals( "ipa" ) ? AppPlatform.iOS
+                        : AppPlatform.Android;
+                    MobileAppInfo mai = appService.saveAppPackage( platform, file );
+                    if ( mai.getBundleId().equals( app.getBundleIdentifier() ) ) {
+                        app.setBundle(
+                            FileCopyUtils.copyToByteArray( new File( mai.getBundlePath() ) ) );
+                        app.setIcon( mai.getIcon() );
+                        app.setVersion( mai.getVersion() );
+                        app.setUpdateTime( new Date() );
+                        appService.update( app );
+                        return new ResponseEntity<>( HttpStatus.OK );
+                    } else {
+                        return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+                    }
+                } else {
+                    return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+                }
+            } else {
+                return new ResponseEntity<>( HttpStatus.NOT_FOUND );
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
+        } catch (Error e) {
+            return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR );
+        }
     }
 }

@@ -199,6 +199,55 @@ http://domain_name:port/api/app/1/package.apk
 
  
 
+### 上传 APP 安装包
+
+地址：http://domain\_name:port/api/app/{sku}/update
+
+请求方式：POST ( multipart )
+
+ 
+
+**入参：**
+
+| **字段** | **含义**       | **必传** | **备注**       |
+|----------|----------------|----------|----------------|
+| sku      | APP 的 SKU 号  | Y        | URL路径参数    |
+| package  | APP 安装包文件 | Y        | multipart 参数 |
+
+ 
+
+**请求示例：**
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+POST /api/app/{sku}/update
+Host: host:port
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryHlbB8VVdqgpBPM4K
+Origin: http://localhost
+Accept-Encoding: gzip, deflate
+Cookie: AJS.conglomerate.cookie="|tabContainer.tabContainer.selectedTab=Capabilities"; BAMBOO-AGENT-FILTER=LAST_25_BUILDS; bamboo.dash.display.toggles=buildQueueActions-actions-queueControl
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4
+Referer: http://localhost/api/my_avatar.html
+Content-Length: 571834
+Accept-Language: en-us
+------WebKitFormBoundaryHlbB8VVdqgpBPM4K
+Content-Disposition: form-data; name="package"; filename="package.ipa"
+
+[package data]
+------WebKitFormBoundaryHlbB8VVdqgpBPM4K--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+**响应：**
+
+非数据接口，无响应数据。
+
+HTTP状态码为200表示成功
+
+ 
+
 附录
 ----
 
