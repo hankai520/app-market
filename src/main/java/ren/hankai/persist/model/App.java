@@ -6,6 +6,9 @@
 
 package ren.hankai.persist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -22,6 +25,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
+import ren.hankai.util.DateTimeSerializer;
 
 /**
  * 无线应用信息
@@ -152,6 +157,8 @@ public class App implements Serializable {
         this.version = version;
     }
 
+    @JsonSerialize(
+        using = DateTimeSerializer.class )
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -160,6 +167,8 @@ public class App implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @JsonSerialize(
+        using = DateTimeSerializer.class )
     public Date getCreateTime() {
         return createTime;
     }
@@ -208,6 +217,7 @@ public class App implements Serializable {
         this.metaData = metaData;
     }
 
+    @JsonIgnore
     public byte[] getIcon() {
         return icon;
     }
@@ -216,6 +226,7 @@ public class App implements Serializable {
         this.icon = icon;
     }
 
+    @JsonIgnore
     public byte[] getBundle() {
         return bundle;
     }

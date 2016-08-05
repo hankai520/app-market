@@ -10,10 +10,10 @@
     </jsp:attribute>
     <jsp:attribute name="pageDidLoad">
         <script type="text/javascript">
-            $('#miApps').addClass('active');
+            $('#miUsers').addClass('active');
             <!--// 必须用JS来初始化表格，因为通过HTML属性来初始化，本地化JS的执行会滞后，因而失效 -->
-            $('#appsTable').bootstrapTable({
-                url: 'admin/apps.json',
+            $('#dataTable').bootstrapTable({
+                url: 'admin/users.json',
                 sidePagination: 'server',
                 showRefresh: true,
                 pageList: [10,20,50,100],
@@ -23,43 +23,58 @@
                 columns: [{
                     field: 'id',
                     title: 'ID',
-                    sortable: 'true',
+                    sortable: false,
                     valign: 'middle'
                 }, {
+                    field: 'mobile',
+                    title: '手机号',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        return '<a href="/admin/users/' + row.id + '/edit">' + value + '</a>';
+                    }
+                }, {
                     field: 'name',
-                    title: '名称',
+                    title: '姓名',
                     valign: 'middle',
-                    sortable: 'true',
-                    formatter: function (value, row, index) {
-                        return '<a href="admin/apps/' + row.id + '/edit">' + value + '</a>';
-                    }
+                    sortable: true
                 }, {
-                    field: 'platformDesc',
-                    title: '平台',
+                    field: 'roleName',
+                    title: '角色',
                     valign: 'middle',
-                    sortable: 'false'
+                    sortable: false
                 }, {
-                    field: 'version',
-                    title: '版本',
-                    valign: 'middle',
-                    sortable: 'true'
-                }, {
-                    field: 'bundleIdentifier',
-                    title: '程序包ID',
-                    valign: 'middle',
-                    sortable: 'false'
-                }, {
-                    title: 'APP元数据',
-                    valign: 'middle',
-                    sortable: 'false',
-                    formatter: function (value, row, index) {
-                        return '<a href="/api/app/' + row.id + '/metadata" target="_blank">调用接口</a>';
-                    }
-                }, {
-                    field: 'statusDesc',
+                    field: 'statusName',
                     title: '状态',
                     valign: 'middle',
-                    sortable: 'false'
+                    sortable: false
+                }, {
+                    field: 'wxOpenId',
+                    title: '微信openid',
+                    valign: 'middle',
+                    sortable: false
+                }, {
+                    field: 'createTime',
+                    title: '创建时间',
+                    valign: 'middle',
+                    sortable: false
+                }, {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    valign: 'middle',
+                    sortable: false,
+                    visible: false
+                }, {
+                    title: '操作',
+                    valign: 'middle',
+                    sortable: false,
+                    formatter: function (value, row, index) {
+                        if (row.role == 1) {
+                            return '<a href="/admin/users/' + row.id + '/change_pwd">修改密码</a>';
+                        } else {
+                            return '-';
+                        }
+                    }
                 }]
             });
         </script>
@@ -68,7 +83,7 @@
         <div class="row">
             <ol class="breadcrumb">
                 <li><a href=""><span class="glyphicon glyphicon-home"></span></a></li>
-                <li>应用管理</li>
+                <li>前台用户管理</li>
             </ol>
         </div><!--/.row-->
         <div class="row">
@@ -76,16 +91,16 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="columns btn-group pull-left">
-                            <a href="admin/apps/add">
-                                <button class="btn btn-info" type="button" title="添加应用">
+                            <a href="/admin/users/add">
+                                <button class="btn btn-info" type="button" title="添加用户">
                                     <i class="glyphicon glyphicon-plus"></i>
-                                    添加应用
+                                    添加用户
                                 </button>
                             </a>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table id="appsTable"></table>
+                        <table id="dataTable"></table>
                     </div>
                 </div>
             </div>

@@ -70,18 +70,18 @@
     <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
         <form role="search">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+                
             </div>
         </form>
         <ul class="nav menu">
             <li><a href=""><span class="glyphicon glyphicon-home"></span>网站前台</a></li>
             <li role="presentation" class="divider"></li>
             <li id="miApps">
-                <a href="admin/apps"><span class="glyphicon glyphicon-th"></span>应用管理</a>
+                <a href="/admin/apps"><span class="glyphicon glyphicon-th"></span>应用管理</a>
             </li>
             <li role="presentation" class="divider"></li>
             <li id="miUsers">
-                <a href="javascript:;"><span class="glyphicon glyphicon-cog"></span>用户管理</a>
+                <a href="/admin/users"><span class="glyphicon glyphicon-cog"></span>用户管理</a>
             </li>
         </ul>
         <div class="attribution"><a href="http://www.sparksoft.com.cn" target="_blank">© 2015 江苏星网软件有限公司</a></div>

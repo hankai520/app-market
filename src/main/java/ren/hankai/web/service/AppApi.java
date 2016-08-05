@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import ren.hankai.config.Route;
 import ren.hankai.persist.AppService;
 import ren.hankai.persist.model.App;
+import ren.hankai.web.payload.ApiCode;
+import ren.hankai.web.payload.ApiResponse;
+import ren.hankai.web.payload.BusinessError;
 
 /**
  * 应用信息 API
@@ -102,13 +106,24 @@ public class AppApi {
 
     @RequestMapping(
         value = Route.API_APP_METADATA,
-        produces = { MediaType.TEXT_PLAIN_VALUE } )
-    public ResponseEntity<String> getAppMetaData( @PathVariable( "appId" ) Integer appId ) {
-        App app = appService.find( appId );
-        if ( app != null ) {
-            return new ResponseEntity<String>( app.getMetaData(), HttpStatus.OK );
-        } else {
-            return new ResponseEntity<String>( HttpStatus.NOT_FOUND );
+        produces = { "application/json; charset=utf-8" } )
+    @ResponseBody
+    public ApiResponse getAppMetaData( @PathVariable( "appId" ) Integer appId ) {
+        ApiResponse response = new ApiResponse();
+        try {
+            App app = appService.find( appId );
+            if ( app != null ) {
+                response.getBody().setData( app );
+                response.getBody().setSuccess( true );
+            } else {
+                response.getBody().setError( BusinessError.AppNotFound );
+            }
+            response.setCode( ApiCode.Success );
+        } catch (Exception e) {
+            logger.error( Route.API_APP_METADATA, e );
+        } catch (Error e) {
+            logger.error( Route.API_APP_METADATA, e );
         }
+        return response;
     }
 }
