@@ -151,17 +151,14 @@ public class AppApi {
                     AppPlatform platform = ext.equals( "ipa" ) ? AppPlatform.iOS
                         : AppPlatform.Android;
                     MobileAppInfo mai = appService.saveAppPackage( platform, file );
-                    if ( mai.getBundleId().equals( app.getBundleIdentifier() ) ) {
-                        app.setBundle(
-                            FileCopyUtils.copyToByteArray( new File( mai.getBundlePath() ) ) );
-                        app.setIcon( mai.getIcon() );
-                        app.setVersion( mai.getVersion() );
-                        app.setUpdateTime( new Date() );
-                        appService.update( app );
-                        return new ResponseEntity<>( HttpStatus.OK );
-                    } else {
-                        return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
-                    }
+                    app.setBundle(
+                        FileCopyUtils.copyToByteArray( new File( mai.getBundlePath() ) ) );
+                    app.setBundleIdentifier( mai.getBundleId() );
+                    app.setIcon( mai.getIcon() );
+                    app.setVersion( mai.getVersion() );
+                    app.setUpdateTime( new Date() );
+                    appService.update( app );
+                    return new ResponseEntity<>( HttpStatus.OK );
                 } else {
                     return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
                 }
