@@ -56,6 +56,11 @@
                                     <form:errors cssClass="field-error" path="name" />
                                 </div>
                                 <div class="form-group">
+                                    <label>SKU <span class="fg-red">*</span></label>
+                                    <form:input path="sku" cssClass="form-control" maxlength="20" placeholder="最大长度20个字符" />
+                                    <form:errors cssClass="field-error" path="sku" />
+                                </div>
+                                <div class="form-group">
                                     <label>运行平台 <span class="fg-red">*</span></label>
                                     <form:select path="platform" cssClass="form-control">
                                         <form:option value="iOS"><fmt:message key="app.platform.iOS" /></form:option>

@@ -1,5 +1,5 @@
-质监审查员系统 - 移动客户端API
-==============================
+应用市场 - 移动客户端API
+========================
 
  
 
@@ -21,7 +21,7 @@ application/x-www-form-urlencoded 内容类型，否则，采用 application/jso
 
 接口服务器参数：
 
-domain\_name: 192.168.10.70
+domain\_name:
 
 port: 8000
 
@@ -90,9 +90,9 @@ port: 8000
 
  
 
-### 审查员登录
+### 查询APP元数据
 
-地址：http://domain\_name:port/api/censor/login
+地址：http://domain\_name:port/api/app/login
 
 请求方式：GET/POST （建议POST）
 

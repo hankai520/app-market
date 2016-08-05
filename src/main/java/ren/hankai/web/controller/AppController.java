@@ -30,6 +30,7 @@ import ren.hankai.config.Route;
 import ren.hankai.config.WebConfig;
 import ren.hankai.persist.AppService;
 import ren.hankai.persist.model.App;
+import ren.hankai.persist.util.JpaServiceUtil;
 import ren.hankai.persist.util.PaginatedResult;
 import ren.hankai.util.MobileAppInfo;
 import ren.hankai.web.payload.PaginatedList;
@@ -49,6 +50,8 @@ public class AppController {
     private AppService          appService;
     @Autowired
     private MessageSource       messageSource;
+    @Autowired
+    private JpaServiceUtil      jpaServiceUtil;
 
     @RequestMapping( Route.BG_APPS )
     public ModelAndView index() {
@@ -166,17 +169,23 @@ public class AppController {
         } else {
             try {
                 app.setId( appId );
-                if ( ( app.getPackageFile() != null ) && ( app.getPackageFile().getSize() > 0l ) ) {
-                    MobileAppInfo mai = appService.saveAppPackage( app.getPlatform(),
-                        app.getPackageFile() );
-                    localApp.setBundle(
-                        FileCopyUtils.copyToByteArray( new File( mai.getBundlePath() ) ) );
-                    localApp.setIcon( mai.getIcon() );
-                    localApp.setBundleIdentifier( mai.getBundleId() );
-                    localApp.setVersion( mai.getVersion() );
+                App dup = jpaServiceUtil.findUniqueBy( App.class, "sku", app.getSku() );
+                if ( ( dup != null ) && !dup.getId().equals( appId ) ) {
+                    br.rejectValue( "sku", "Duplicate.app.sku" );
                 }
                 if ( !br.hasErrors() ) {
+                    if ( ( app.getPackageFile() != null )
+                        && ( app.getPackageFile().getSize() > 0l ) ) {
+                        MobileAppInfo mai = appService.saveAppPackage( app.getPlatform(),
+                            app.getPackageFile() );
+                        localApp.setBundle(
+                            FileCopyUtils.copyToByteArray( new File( mai.getBundlePath() ) ) );
+                        localApp.setIcon( mai.getIcon() );
+                        localApp.setBundleIdentifier( mai.getBundleId() );
+                        localApp.setVersion( mai.getVersion() );
+                    }
                     localApp.setName( app.getName() );
+                    localApp.setSku( app.getSku() );
                     localApp.setPlatform( app.getPlatform() );
                     localApp.setMetaData( app.getMetaData() );
                     localApp.setStatus( app.getStatus() );

@@ -23,13 +23,18 @@
                 columns: [{
                     field: 'id',
                     title: 'ID',
-                    sortable: 'true',
+                    sortable: true,
                     valign: 'middle'
+                }, {
+                    field: 'sku',
+                    title: 'SKU',
+                    valign: 'middle',
+                    sortable: true
                 }, {
                     field: 'name',
                     title: '名称',
                     valign: 'middle',
-                    sortable: 'true',
+                    sortable: true,
                     formatter: function (value, row, index) {
                         return '<a href="admin/apps/' + row.id + '/edit">' + value + '</a>';
                     }
@@ -37,29 +42,29 @@
                     field: 'platformDesc',
                     title: '平台',
                     valign: 'middle',
-                    sortable: 'false'
+                    sortable: true
                 }, {
                     field: 'version',
                     title: '版本',
                     valign: 'middle',
-                    sortable: 'true'
+                    sortable: true
                 }, {
                     field: 'bundleIdentifier',
                     title: '程序包ID',
                     valign: 'middle',
-                    sortable: 'false'
+                    sortable: false
                 }, {
                     title: 'APP元数据',
                     valign: 'middle',
-                    sortable: 'false',
+                    sortable: false,
                     formatter: function (value, row, index) {
-                        return '<a href="/api/app/' + row.id + '/metadata" target="_blank">调用接口</a>';
+                        return '<a href="/api/app/' + row.sku + '/metadata" target="_blank">调用接口</a>';
                     }
                 }, {
                     field: 'statusDesc',
                     title: '状态',
                     valign: 'middle',
-                    sortable: 'false'
+                    sortable: false
                 }]
             });
         </script>

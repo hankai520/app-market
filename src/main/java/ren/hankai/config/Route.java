@@ -21,7 +21,7 @@ public final class Route {
     public static final String  API_APP_ICON            = API_PREFIX + "/app/{appId}/icon";
     public static final String  API_APP_IOS_PACKAGE     = API_PREFIX + "/app/{appId}/package.ipa";
     public static final String  API_APP_ANDROID_PACKAGE = API_PREFIX + "/app/{appId}/package.apk";
-    public static final String  API_APP_METADATA        = API_PREFIX + "/app/{appId}/metadata";
+    public static final String  API_APP_METADATA        = API_PREFIX + "/app/{sku}/metadata";
     public static final String  BACKGROUND_PREFIX       = "/admin";
     public static final String  BG_LOGIN                = BACKGROUND_PREFIX + "/login";
     public static final String  BG_LOGOUT               = BACKGROUND_PREFIX + "/logout";

@@ -9,6 +9,9 @@ package ren.hankai.persist.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import org.eclipse.persistence.annotations.Cache;
+import org.eclipse.persistence.annotations.CacheCoordinationType;
+import org.eclipse.persistence.annotations.CacheType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -24,6 +27,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import ren.hankai.util.DateTimeSerializer;
@@ -38,7 +42,12 @@ import ren.hankai.util.DateTimeSerializer;
 @Entity
 @Table(
     name = "apps" )
-@Cacheable( false )
+@Cacheable( true )
+@Cache(
+    type = CacheType.SOFT,
+    size = 1024 * 16,
+    expiry = 1000 * 60 * 2,
+    coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS )
 public class App implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +55,18 @@ public class App implements Serializable {
     @GeneratedValue(
         strategy = GenerationType.IDENTITY )
     private Integer           id;
+    /**
+     * 应用sku
+     */
+    @Column(
+        length = 45,
+        nullable = false )
+    @Size(
+        min = 1,
+        max = 20 )
+    @Pattern(
+        regexp = "[a-zA-Z0-9\\._]*" )
+    private String            sku;
     /**
      * 应用名称
      */
@@ -131,6 +152,14 @@ public class App implements Serializable {
 
     public void setName( String name ) {
         this.name = name;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku( String sku ) {
+        this.sku = sku;
     }
 
     public String getBundleIdentifier() {

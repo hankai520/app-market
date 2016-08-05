@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import ren.hankai.config.Route;
 import ren.hankai.persist.AppService;
 import ren.hankai.persist.model.App;
+import ren.hankai.persist.util.JpaServiceUtil;
 import ren.hankai.web.payload.ApiCode;
 import ren.hankai.web.payload.ApiResponse;
 import ren.hankai.web.payload.BusinessError;
@@ -47,6 +48,8 @@ public class AppApi {
     private AppService          appService;
     @Autowired
     private VelocityEngine      engine;
+    @Autowired
+    private JpaServiceUtil      jpaUtil;
 
     @RequestMapping(
         value = { Route.API_APP_IOS_PACKAGE, Route.API_APP_ANDROID_PACKAGE },
@@ -108,10 +111,10 @@ public class AppApi {
         value = Route.API_APP_METADATA,
         produces = { "application/json; charset=utf-8" } )
     @ResponseBody
-    public ApiResponse getAppMetaData( @PathVariable( "appId" ) Integer appId ) {
+    public ApiResponse getAppMetaData( @PathVariable( "sku" ) String sku ) {
         ApiResponse response = new ApiResponse();
         try {
-            App app = appService.find( appId );
+            App app = jpaUtil.findUniqueBy( App.class, "sku", sku );
             if ( app != null ) {
                 response.getBody().setData( app );
                 response.getBody().setSuccess( true );
