@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<t:frame>
+<t:background>
     <jsp:attribute name="linkResources">
         <link href="css/bootstrap-table.min.css" rel="stylesheet" />
     </jsp:attribute>
@@ -96,4 +96,4 @@
             </div>
         </div><!--/.row-->
     </jsp:body>
-</t:frame>
+</t:background>

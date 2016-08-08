@@ -16,7 +16,7 @@
             + path + "/";
 %>
 <base href="<%=basePath%>" />
-<title>星网移动应用市场 | 后台登录</title>
+<title>星网移动应用市场 | 前台登录</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
@@ -34,9 +34,9 @@
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
             <div class="login-panel panel panel-default">
-                <div class="panel-heading">星网移动应用市场 - 后台</div>
+                <div class="panel-heading">星网移动应用市场</div>
                 <div class="panel-body">
-                    <form:form method="post" action="admin/login" modelAttribute="user" onsubmit="return verify();">
+                    <form:form method="post" action="/market/login" modelAttribute="user" onsubmit="return verify();">
                         <fieldset>
                             <div class="form-group">
                                 <form:input path="loginId" cssClass="form-control" placeholder="手机号" maxlength="15"/>

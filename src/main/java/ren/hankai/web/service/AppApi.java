@@ -74,7 +74,7 @@ public class AppApi {
 
     @RequestMapping(
         value = { Route.API_APP_ICON },
-        produces = { MediaType.IMAGE_JPEG_VALUE } )
+        produces = { MediaType.IMAGE_PNG_VALUE } )
     public ResponseEntity<ByteArrayResource> getAppIcon( @PathVariable( "appId" ) Integer appId ) {
         App app = appService.find( appId );
         if ( app != null ) {

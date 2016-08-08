@@ -59,11 +59,23 @@ public class UserController {
     @Autowired
     private MessageSource       messageSource;
 
-    private void rememberUserViaCookie( UserViewModel user, HttpServletResponse response ) {
+    /**
+     * 用cookie记住用户的登录信息
+     *
+     * @param user 用户信息
+     * @param response HTTP响应
+     * @param path cookie绑定的URL相对路径
+     * @author hankai
+     * @since Aug 8, 2016 10:02:16 AM
+     */
+    private void rememberUserViaCookie( UserViewModel user, HttpServletResponse response,
+                    String path ) {
         Cookie cookie = new Cookie( WebConfig.COOKIE_KEY_LOGIN_ID, user.getLoginId() );
+        cookie.setPath( path );
         cookie.setMaxAge( 60 * 60 * 24 * 7 );
         response.addCookie( cookie );
         cookie = new Cookie( WebConfig.COOKIE_KEY_PASSWORD, user.getPassword() );
+        cookie.setPath( path );
         cookie.setMaxAge( 60 * 60 * 24 * 7 );
         response.addCookie( cookie );
     }
@@ -84,7 +96,7 @@ public class UserController {
     @RequestMapping(
         value = Route.BG_LOGIN,
         method = { RequestMethod.POST, RequestMethod.GET } )
-    public ModelAndView login(
+    public ModelAndView bgLogin(
                     @CookieValue(
                         value = WebConfig.COOKIE_KEY_LOGIN_ID,
                         required = false ) String loginId,
@@ -116,9 +128,9 @@ public class UserController {
                 } else if ( localUser.getRole() != UserRole.Operator ) {
                     br.rejectValue( "loginId", "admin.login.account.role.invalid" );
                 } else {
-                    session.setAttribute( WebConfig.SESSION_KEY_USER, localUser );
+                    session.setAttribute( WebConfig.SESSION_KEY_BG_USER, localUser );
                     if ( ( user.getRemember() != null ) && user.getRemember() ) {
-                        rememberUserViaCookie( user, response );
+                        rememberUserViaCookie( user, response, Route.BACKGROUND_PREFIX );
                     }
                 }
             }
@@ -137,14 +149,82 @@ public class UserController {
         return mav;
     }
 
+    @RequestMapping(
+        value = Route.FG_LOGIN,
+        method = { RequestMethod.POST, RequestMethod.GET } )
+    public ModelAndView fgLogin(
+                    @CookieValue(
+                        value = WebConfig.COOKIE_KEY_LOGIN_ID,
+                        required = false ) String loginId,
+                    @CookieValue(
+                        value = WebConfig.COOKIE_KEY_PASSWORD,
+                        required = false ) String password,
+                    @ModelAttribute( "user" ) @Valid UserViewModel user,
+                    BindingResult br,
+                    HttpServletRequest request,
+                    HttpServletResponse response,
+                    HttpSession session ) {
+        ModelAndView mav = new ModelAndView();
+        if ( StringUtils.isEmpty( user.getLoginId() ) ) {
+            user.setLoginId( loginId );
+        }
+        if ( StringUtils.isEmpty( user.getPassword() ) ) {
+            user.setPassword( password );
+        }
+        String method = request.getMethod().toUpperCase();
+        if ( "GET".equals( method ) && !user.hasContents() ) {
+            mav.setViewName( "fg_login" );
+        } else {
+            if ( !br.hasErrors() ) {
+                User localUser = jpaUtil.findUniqueBy( User.class, "mobile", user.getLoginId() );
+                if ( localUser == null ) {
+                    br.rejectValue( "loginId", "fg.login.account.not.found" );
+                } else if ( !user.getPassword().equalsIgnoreCase( localUser.getPassword() ) ) {
+                    br.rejectValue( "password", "fg.login.password.invalid" );
+                } else if ( localUser.getRole() != UserRole.MobileUser ) {
+                    br.rejectValue( "loginId", "fg.login.account.role.invalid" );
+                } else {
+                    session.setAttribute( WebConfig.SESSION_KEY_FG_USER, localUser );
+                    if ( ( user.getRemember() != null ) && user.getRemember() ) {
+                        rememberUserViaCookie( user, response, Route.FOREGROUND_PREFIX );
+                    }
+                }
+            }
+            if ( br.hasErrors() ) {
+                mav.addObject( "user", user );
+                mav.setViewName( "fg_login" );
+            } else {
+                mav.setViewName( "redirect:/" );
+            }
+        }
+        return mav;
+    }
+
     @RequestMapping( Route.BG_LOGOUT )
-    public ModelAndView logout( HttpSession session, HttpServletResponse response ) {
+    public ModelAndView bgLogout( HttpSession session, HttpServletResponse response ) {
         ModelAndView mav = new ModelAndView( "redirect:" + Route.BG_LOGIN );
-        session.invalidate();
+        session.removeAttribute( WebConfig.SESSION_KEY_BG_USER );
         Cookie cookie = new Cookie( WebConfig.COOKIE_KEY_LOGIN_ID, "" );
+        cookie.setPath( Route.BACKGROUND_PREFIX );
         cookie.setMaxAge( 0 );
         response.addCookie( cookie );
         cookie = new Cookie( WebConfig.COOKIE_KEY_PASSWORD, "" );
+        cookie.setPath( Route.BACKGROUND_PREFIX );
+        cookie.setMaxAge( 0 );
+        response.addCookie( cookie );
+        return mav;
+    }
+
+    @RequestMapping( Route.FG_LOGOUT )
+    public ModelAndView fgLogout( HttpSession session, HttpServletResponse response ) {
+        ModelAndView mav = new ModelAndView( "redirect:" + Route.FG_LOGIN );
+        session.removeAttribute( WebConfig.SESSION_KEY_FG_USER );
+        Cookie cookie = new Cookie( WebConfig.COOKIE_KEY_LOGIN_ID, "" );
+        cookie.setPath( Route.FOREGROUND_PREFIX );
+        cookie.setMaxAge( 0 );
+        response.addCookie( cookie );
+        cookie = new Cookie( WebConfig.COOKIE_KEY_PASSWORD, "" );
+        cookie.setPath( Route.FOREGROUND_PREFIX );
         cookie.setMaxAge( 0 );
         response.addCookie( cookie );
         return mav;

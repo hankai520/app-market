@@ -23,7 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import ren.hankai.config.Route;
@@ -214,6 +216,19 @@ public class AppController {
         } else {
             appService.deleteById( appId );
         }
+        return mav;
+    }
+
+    @RequestMapping( Route.FG_APPS )
+    public ModelAndView foregroundIndex( HttpServletRequest request ) {
+        ModelAndView mav = new ModelAndView( "fg_apps" );
+        String path = request.getContextPath();
+        String basePath = request.getScheme() + "://"
+            + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+        mav.addObject( "basePath", basePath );
+        List<App> apps = appService.getAvailableApps();
+        mav.addObject( "apps", apps );
         return mav;
     }
 }

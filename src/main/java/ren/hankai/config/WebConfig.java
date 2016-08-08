@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 
 import ren.hankai.persist.model.User;
 import ren.hankai.web.interceptor.AdministrationInterceptor;
+import ren.hankai.web.interceptor.SiteAccessInterceptor;
 
 /**
  * Web相关配置
@@ -55,9 +56,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public static final SimpleDateFormat dateTimeFormatter    = new SimpleDateFormat(
         DATE_TIME_FORMAT );
     /**
-     * 会话数据键：当前登录用户
+     * 会话数据键：当前登录的后台用户
      */
-    public static final String           SESSION_KEY_USER     = "current_user";
+    public static final String           SESSION_KEY_BG_USER  = "current_bg_user";
+    /**
+     * 会话数据键：当前登录的前台用户
+     */
+    public static final String           SESSION_KEY_FG_USER  = "current_fg_user";
     /**
      * 会话数据键：用户登录前访问的 URL
      */
@@ -102,12 +107,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private AdministrationInterceptor adminInterceptor;
+    @Autowired
+    private SiteAccessInterceptor     siteAccessInterceptor;
 
     @Override
     public void addInterceptors( InterceptorRegistry registry ) {
         registry.addInterceptor( adminInterceptor )
             .addPathPatterns( "/admin/**" )
             .excludePathPatterns( Route.BG_LOGIN );
+        registry.addInterceptor( siteAccessInterceptor )
+            .addPathPatterns( "/market/**" );
     }
 
     @Bean
@@ -131,7 +140,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * @since Jul 3, 2016 11:36:35 AM
      */
     public static User getUserInSession( HttpSession session ) {
-        Object userObj = session.getAttribute( WebConfig.SESSION_KEY_USER );
+        Object userObj = session.getAttribute( WebConfig.SESSION_KEY_BG_USER );
         if ( ( userObj != null ) && ( userObj instanceof User ) ) {
             User user = (User) userObj;
             return user;

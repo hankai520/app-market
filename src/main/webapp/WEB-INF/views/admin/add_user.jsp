@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:frame>
+<t:background>
     <jsp:attribute name="linkResources">
         <link href="css/bootstrap-switch.min.css" rel="stylesheet" />
     </jsp:attribute>
@@ -104,4 +104,4 @@
             </div>
         </div><!--/.row-->
     </jsp:body>
-</t:frame>
+</t:background>
