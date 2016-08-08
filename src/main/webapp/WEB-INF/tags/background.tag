@@ -56,7 +56,9 @@
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span> ${ current_bg_user.mobile } <span class="caret"></span>
+                            <span class="glyphicon glyphicon-user"></span> 
+                            ${ not empty current_bg_user.name ? current_bg_user.name : current_bg_user.mobile }
+                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span>退出</a></li>

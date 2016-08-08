@@ -1,4 +1,5 @@
 <%@ tag description="Main JSP Frame Template" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--//用于内嵌的页面加载自身需要的资源 -->
 <%@attribute name="linkResources" fragment="true" %>
 <!--//用于内嵌的页面加载自身需要的JS -->
@@ -50,7 +51,9 @@
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span> ${ current_fg_user.mobile } <span class="caret"></span>
+                            <span class="glyphicon glyphicon-user"></span> 
+                            ${ not empty current_fg_user.name ? current_fg_user.name : current_fg_user.mobile }
+                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/market/logout"><span class="glyphicon glyphicon-log-out"></span>退出</a></li>
