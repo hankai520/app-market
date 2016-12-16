@@ -2,7 +2,7 @@
  * 客户端脚本入口
  * 
  */
-var COOKIE_VAR_PREFIX = 'game_dist_';
+var COOKIE_VAR_PREFIX = 'appmarket_';
 
  var App = function() {
      var handleInit = function() {
