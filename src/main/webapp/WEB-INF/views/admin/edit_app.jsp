@@ -103,6 +103,15 @@
                                     </form:select>
                                     <form:errors cssClass="field-error" path="status" />
                                 </div>
+                                <div class="form-group">
+                                    <label>启用更新检查 <span class="fg-red">*</span></label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <form:checkbox path="enableUpdateCheck"/> 是否启用?
+                                        </label>
+                                    </div>
+                                    <form:errors cssClass="field-error" path="enableUpdateCheck" />
+                                </div>
                             </div>
                         </div>
                     </div>

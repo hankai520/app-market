@@ -13,6 +13,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 
 import ren.hankai.ApplicationTests;
+import ren.hankai.appmarket.util.MobileAppInfo;
 
 /**
  * 移动应用扫描器
@@ -25,7 +26,7 @@ public class MobileAppScannerTest extends ApplicationTests {
 
     /**
      * Test method for
-     * {@link ren.hankai.util.MobileAppScanner#scanAndroidApk(java.lang.String)}.
+     * {@link ren.hankai.appmarket.util.MobileAppScanner#scanAndroidApk(java.lang.String)}.
      */
     @Test
     public void testScanAndroidApk() throws Exception {
@@ -37,7 +38,7 @@ public class MobileAppScannerTest extends ApplicationTests {
     }
 
     /**
-     * Test method for {@link ren.hankai.util.MobileAppScanner#scanIosIpa(java.lang.String)}.
+     * Test method for {@link ren.hankai.appmarket.util.MobileAppScanner#scanIosIpa(java.lang.String)}.
      */
     @Test
     public void testScanIosIpa() throws Exception {

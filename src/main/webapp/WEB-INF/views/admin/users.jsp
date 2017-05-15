@@ -49,11 +49,6 @@
                     valign: 'middle',
                     sortable: false
                 }, {
-                    field: 'wxOpenId',
-                    title: '微信openid',
-                    valign: 'middle',
-                    sortable: false
-                }, {
                     field: 'createTime',
                     title: '创建时间',
                     valign: 'middle',
