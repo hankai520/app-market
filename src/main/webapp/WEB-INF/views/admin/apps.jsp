@@ -55,6 +55,14 @@
                     valign: 'middle',
                     sortable: false
                 }, {
+                  field: 'enableUpdateCheck',
+                  title: '启用更新检查',
+                  valign: 'middle',
+                  sortable: false,
+                  formatter: function(value, row, index) {
+                    return value ? '是' : '否';
+                  }
+                }, {
                     title: 'APP元数据',
                     valign: 'middle',
                     sortable: false,
