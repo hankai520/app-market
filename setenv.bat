@@ -1,5 +1,5 @@
 set TCP_LISTEN=0.0.0.0
-set TCP_PORT=9001
+set TCP_PORT=8003
 
 set _PRG_DIR=%~dp0
 set APP_HOME=%_PRG_DIR%\data

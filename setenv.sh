@@ -4,7 +4,7 @@
 #
 
 TCP_LISTEN=0.0.0.0
-TCP_PORT=9001
+TCP_PORT=8003
 
 PRGDIR=`dirname "$PRG"`
 APP_HOME=$PRGDIR/data
@@ -15,3 +15,4 @@ JAVA_EXEC=java
 
 # More arguments passed to spring boot or jvm
 EXTRA_ARGS=""
+#EXTRA_ARGS="--proxy.name=apps.sparksoft.com.cn --proxy.port=443 --proxy.scheme=https"
