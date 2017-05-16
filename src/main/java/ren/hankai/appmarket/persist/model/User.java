@@ -76,14 +76,14 @@ public class User implements Serializable {
    * 最近一次信息更新的时间
    */
   @Column()
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
   /**
    * 创建时间
    */
   @Column(
       nullable = false)
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
   /**
    * 账号状态

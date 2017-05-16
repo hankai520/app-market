@@ -102,12 +102,12 @@ public class App implements Serializable {
    * 最近一次信息更新的时间
    */
   @Column
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
   /**
    * 应用信息创建时间
    */
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
   /**
    * 应用状态
