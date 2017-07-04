@@ -10,31 +10,31 @@
                         <key>kind</key>
                         <string>software-package</string>
                         <key>url</key>
-                        <string>$!{packageUrl}</string>
+                        <string>${packageUrl}</string>
                     </dict>
                     <dict>
                         <key>kind</key>
                         <string>display-image</string>
                         <key>url</key>
-                        <string>$!{smallImageUrl}</string>
+                        <string>${smallImageUrl}</string>
                     </dict>
                     <dict>
                         <key>kind</key>
                         <string>full-size-image</string>
                         <key>url</key>
-                        <string>$!{largeImageUrl}</string>
+                        <string>${largeImageUrl}</string>
                     </dict>
                 </array>
                 <key>metadata</key>
                 <dict>
                     <key>bundle-identifier</key>
-                    <string>$!{bundleIdentifier}</string>
+                    <string>${bundleIdentifier}</string>
                     <key>bundle-version</key>
-                    <string>$!{bundleVersion}</string>
+                    <string>${bundleVersion}</string>
                     <key>kind</key>
                     <string>software</string>
                     <key>title</key>
-                    <string>$!{appName}</string>
+                    <string>${appName}</string>
                 </dict>
             </dict>
         </array>
