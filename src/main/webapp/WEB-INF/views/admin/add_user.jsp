@@ -80,6 +80,12 @@
                                     <form:errors cssClass="field-error" path="name" />
                                 </div>
                                 <div class="form-group">
+                                    <label>隶属用户组 </label>
+                                    <form:select path="group.id" cssClass="form-control">
+                                        <form:options items="${ allGroups }" itemValue="id" itemLabel="name"/>
+                                    </form:select>
+                                </div>
+                                <div class="form-group">
                                     <label>状态 <span class="fg-red">*</span></label>
                                     <form:select path="status" cssClass="form-control">
                                         <form:option value="Enabled"><fmt:message key="user.status.1" /></form:option>

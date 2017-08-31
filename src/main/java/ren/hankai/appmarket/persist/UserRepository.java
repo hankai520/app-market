@@ -3,7 +3,7 @@ package ren.hankai.appmarket.persist;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
-import ren.hankai.appmarket.persist.model.User;
+import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserRole;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,7 +18,7 @@ import javax.persistence.criteria.Root;
  * @version 1.0.0
  * @since May 15, 2017 2:12:41 PM
  */
-public interface UserRepository extends BaseRepository<User, Integer> {
+public interface UserRepository extends BaseRepository<UserBean, Integer> {
 
   public class UserSpecs {
 
@@ -31,11 +31,11 @@ public interface UserRepository extends BaseRepository<User, Integer> {
      * @author hankai
      * @since May 15, 2017 2:48:34 PM
      */
-    public static Specification<User> byKeyword(String keyword, UserRole role) {
-      return new Specification<User>() {
+    public static Specification<UserBean> byKeyword(String keyword, UserRole role) {
+      return new Specification<UserBean>() {
 
         @Override
-        public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<UserBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
           Predicate pre = null;
           if (role != null) {
             pre = cb.equal(root.get("role"), role);

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import ren.hankai.appmarket.config.Route;
 import ren.hankai.appmarket.config.WebConfig;
-import ren.hankai.appmarket.persist.model.User;
+import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserRole;
 import ren.hankai.appmarket.service.UserService;
 
@@ -35,9 +35,9 @@ public class SiteAccessInterceptor implements HandlerInterceptor {
     final String url = request.getRequestURI().substring(contextPath.length());
     final HttpSession session = request.getSession();
     final Object userObj = session.getAttribute(WebConfig.SESSION_KEY_FG_USER);
-    User user = null;
-    if ((userObj != null) && (userObj instanceof User)) {
-      user = (User) userObj;
+    UserBean user = null;
+    if ((userObj != null) && (userObj instanceof UserBean)) {
+      user = (UserBean) userObj;
       if (user.getRole() == UserRole.MobileUser) {
         // 更新会话中缓存的用户信息
         user = userService.getUserById(user.getId());

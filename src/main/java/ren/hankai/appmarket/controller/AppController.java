@@ -25,15 +25,18 @@ import org.springframework.web.servlet.ModelAndView;
 import ren.hankai.appmarket.api.payload.PaginatedList;
 import ren.hankai.appmarket.config.Route;
 import ren.hankai.appmarket.config.WebConfig;
-import ren.hankai.appmarket.persist.model.App;
+import ren.hankai.appmarket.persist.model.AppBean;
+import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.util.PageUtil;
 import ren.hankai.appmarket.service.AppService;
+import ren.hankai.appmarket.service.GroupService;
 import ren.hankai.appmarket.util.MobileAppInfo;
 
 import java.io.File;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -51,6 +54,8 @@ public class AppController {
   private AppService appService;
   @Autowired
   private MessageSource messageSource;
+  @Autowired
+  private GroupService groupService;
 
   @RequestMapping(Route.BG_APPS)
   public ModelAndView index() {
@@ -77,9 +82,9 @@ public class AppController {
     try {
       final boolean asc = "asc".equalsIgnoreCase(order);
       final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
-      final Page<App> results = appService.searchApps(search, pageable);
+      final Page<AppBean> results = appService.searchApps(search, pageable);
       if (results.hasContent()) {
-        for (final App app : results.getContent()) {
+        for (final AppBean app : results.getContent()) {
           String str = messageSource.getMessage(app.getStatus().i18nKey(), null, null);
           app.setStatusDesc(str);
           str = messageSource.getMessage(app.getPlatform().i18nKey(), null, null);
@@ -102,7 +107,8 @@ public class AppController {
       method = RequestMethod.GET)
   public ModelAndView showAddAppForm() {
     final ModelAndView mav = new ModelAndView("admin/add_app");
-    mav.addObject("app", new App());
+    mav.addObject("app", new AppBean());
+    mav.addObject("allGroups", groupService.getAvailableGroups());
     return mav;
   }
 
@@ -110,7 +116,7 @@ public class AppController {
       value = Route.BG_APP_ADD,
       method = RequestMethod.POST)
   public ModelAndView addApp(
-      @ModelAttribute("app") @Valid App app,
+      @ModelAttribute("app") @Valid AppBean app,
       BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin/add_app");
     if (app.getPackageFile() == null) {
@@ -130,13 +136,14 @@ public class AppController {
         }
         mav.addObject(WebConfig.WEB_PAGE_MESSAGE,
             messageSource.getMessage("operation.success", null, null));
-        mav.addObject("app", new App());
+        mav.addObject("app", new AppBean());
       } catch (final Exception e) {
         mav.addObject("app", app);
         mav.addObject(WebConfig.WEB_PAGE_ERROR,
             messageSource.getMessage("operation.fail", null, null));
       }
     }
+    mav.addObject("allGroups", groupService.getAvailableGroups());
     return mav;
   }
 
@@ -145,9 +152,10 @@ public class AppController {
       method = RequestMethod.GET)
   public ModelAndView showEditAppForm(@PathVariable("appId") Integer appId) {
     final ModelAndView mav = new ModelAndView("admin/edit_app");
-    final App app = appService.getAppById(appId);
+    final AppBean app = appService.getAppById(appId);
     if (app != null) {
       mav.addObject("app", app);
+      mav.addObject("allGroups", groupService.getAvailableGroups());
     } else {
       mav.setViewName("redirect:/404.html");
     }
@@ -159,15 +167,15 @@ public class AppController {
       method = RequestMethod.POST)
   public ModelAndView editApp(
       @PathVariable("appId") Integer appId,
-      @ModelAttribute("app") @Valid App app, BindingResult br) {
+      @ModelAttribute("app") @Valid AppBean app, BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin/edit_app");
-    final App localApp = appService.getAppById(appId);
+    final AppBean localApp = appService.getAppById(appId);
     if (localApp == null) {
       mav.setViewName("redirect:/404.html");
     } else {
       try {
         app.setId(appId);
-        final App dup = appService.getAppBySku(app.getSku());
+        final AppBean dup = appService.getAppBySku(app.getSku());
         if ((dup != null) && !dup.getId().equals(appId)) {
           br.rejectValue("sku", "Duplicate.app.sku");
         }
@@ -186,6 +194,7 @@ public class AppController {
           localApp.setStatus(app.getStatus());
           localApp.setEnableUpdateCheck(app.isEnableUpdateCheck());
           localApp.setUpdateTime(new Date());
+          localApp.setGroupIds(app.getGroupIds());
           appService.saveApp(localApp, mai);
           if ((mai != null) && !FileUtils.deleteQuietly(new File(mai.getBundlePath()))) {
             logger.error("Failed to delete uploaded package at path: " + mai.getBundlePath());
@@ -198,6 +207,7 @@ public class AppController {
             messageSource.getMessage("operation.fail", null, null));
       }
       mav.addObject("app", app);
+      mav.addObject("allGroups", groupService.getAvailableGroups());
     }
     return mav;
   }
@@ -207,7 +217,7 @@ public class AppController {
       method = RequestMethod.GET)
   public ModelAndView deleteApp(@PathVariable("appId") Integer appId) {
     final ModelAndView mav = new ModelAndView("redirect:" + Route.BG_APPS);
-    final App app = appService.getAppById(appId);
+    final AppBean app = appService.getAppById(appId);
     if (app == null) {
       mav.setViewName("redirect:/404.html");
     } else {
@@ -217,14 +227,15 @@ public class AppController {
   }
 
   @RequestMapping(Route.FG_APPS)
-  public ModelAndView foregroundIndex(HttpServletRequest request) {
+  public ModelAndView foregroundIndex(HttpServletRequest request, HttpSession session) {
     final ModelAndView mav = new ModelAndView("site/apps");
     final String path = request.getContextPath();
     final String basePath = request.getScheme() + "://"
         + request.getServerName() + ":" + request.getServerPort()
         + path + "/";
     mav.addObject("basePath", basePath);
-    final Page<App> results = appService.getAvailableApps(null);
+    final UserBean currentUser = WebConfig.getForegroundUserInSession(session);
+    final Page<AppBean> results = appService.getAvailableApps(currentUser.getId(), null);
     mav.addObject("apps", results.getContent());
     return mav;
   }

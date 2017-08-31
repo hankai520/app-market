@@ -27,10 +27,11 @@ import ren.hankai.appmarket.api.payload.PaginatedList;
 import ren.hankai.appmarket.api.payload.UserViewModel;
 import ren.hankai.appmarket.config.Route;
 import ren.hankai.appmarket.config.WebConfig;
-import ren.hankai.appmarket.persist.model.User;
+import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserRole;
 import ren.hankai.appmarket.persist.model.UserStatus;
 import ren.hankai.appmarket.persist.util.PageUtil;
+import ren.hankai.appmarket.service.GroupService;
 import ren.hankai.appmarket.service.UserService;
 
 import java.util.Date;
@@ -56,6 +57,8 @@ public class UserController {
   private UserService userService;
   @Autowired
   private MessageSource messageSource;
+  @Autowired
+  private GroupService groupService;
 
   /**
    * 用cookie记住用户的登录信息
@@ -118,7 +121,7 @@ public class UserController {
       mav.setViewName("admin/login");
     } else {
       if (!br.hasErrors()) {
-        final User localUser = userService.getUserByMobile(user.getLoginId());
+        final UserBean localUser = userService.getUserByMobile(user.getLoginId());
         if (localUser == null) {
           br.rejectValue("loginId", "admin.login.account.not.found");
         } else if (!user.getPassword().equalsIgnoreCase(localUser.getPassword())) {
@@ -174,7 +177,7 @@ public class UserController {
       mav.setViewName("site/login");
     } else {
       if (!br.hasErrors()) {
-        final User localUser = userService.getUserByMobile(user.getLoginId());
+        final UserBean localUser = userService.getUserByMobile(user.getLoginId());
         if (localUser == null) {
           br.rejectValue("loginId", "fg.login.account.not.found");
         } else if (!user.getPassword().equalsIgnoreCase(localUser.getPassword())) {
@@ -253,9 +256,9 @@ public class UserController {
     try {
       final boolean asc = "asc".equalsIgnoreCase(order);
       final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
-      final Page<User> results = userService.searchUsers(null, search, pageable);
+      final Page<UserBean> results = userService.searchUsers(null, search, pageable);
       if (results.hasContent()) {
-        for (final User u : results.getContent()) {
+        for (final UserBean u : results.getContent()) {
           u.setStatusName(
               messageSource.getMessage(u.getStatus().i18nKey(), null, null));
           u.setRoleName(messageSource.getMessage(u.getRole().i18nKey(), null, null));
@@ -277,17 +280,18 @@ public class UserController {
       method = RequestMethod.GET)
   public ModelAndView addUserForm() {
     final ModelAndView mav = new ModelAndView("admin/add_user");
-    mav.addObject("user", new User());
+    mav.addObject("user", new UserBean());
+    mav.addObject("allGroups", groupService.getAvailableGroups());
     return mav;
   }
 
   @RequestMapping(
       value = Route.BG_ADD_USER,
       method = RequestMethod.POST)
-  public ModelAndView addUser(@ModelAttribute("user") @Valid User user,
+  public ModelAndView addUser(@ModelAttribute("user") @Valid UserBean user,
       BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin/add_user");
-    final User duplicate = userService.getUserByMobile(user.getMobile());
+    final UserBean duplicate = userService.getUserByMobile(user.getMobile());
     if ((duplicate != null) && !duplicate.getId().equals(user.getId())) {
       br.rejectValue("mobile", "Duplicate.user.mobile");
     }
@@ -299,13 +303,14 @@ public class UserController {
         userService.saveUser(user);
         mav.addObject(WebConfig.WEB_PAGE_MESSAGE,
             messageSource.getMessage("operation.success", null, null));
-        mav.addObject("user", new User());
+        mav.addObject("user", new UserBean());
       } catch (final Exception e) {
         mav.addObject("user", user);
         mav.addObject(WebConfig.WEB_PAGE_ERROR,
             messageSource.getMessage("operation.fail", null, null));
       }
     }
+    mav.addObject("allGroups", groupService.getAvailableGroups());
     return mav;
   }
 
@@ -314,9 +319,10 @@ public class UserController {
       method = RequestMethod.GET)
   public ModelAndView editUserForm(@PathVariable("user_id") Integer userId) {
     final ModelAndView mav = new ModelAndView("admin/edit_user");
-    final User user = userService.getUserById(userId);
+    final UserBean user = userService.getUserById(userId);
     if (user != null) {
       mav.addObject("user", user);
+      mav.addObject("allGroups", groupService.getAvailableGroups());
     } else {
       mav.setViewName("redirect:/404.html");
     }
@@ -327,11 +333,11 @@ public class UserController {
       value = Route.BG_EDIT_USER,
       method = RequestMethod.POST)
   public ModelAndView editUser(@PathVariable("user_id") Integer userId,
-      @ModelAttribute("user") @Valid User user, BindingResult br,
+      @ModelAttribute("user") @Valid UserBean user, BindingResult br,
       HttpSession session) {
     final ModelAndView mav = new ModelAndView("admin/edit_user");
-    final User currentUser = WebConfig.getUserInSession(session);
-    final User existUser = userService.getUserById(userId);
+    final UserBean currentUser = WebConfig.getBackgroundUserInSession(session);
+    final UserBean existUser = userService.getUserById(userId);
     if (existUser == null) {
       mav.setViewName("redirect:/404.html");
     } else {
@@ -343,7 +349,7 @@ public class UserController {
         }
       }
       if (!br.hasErrors()) {
-        final User duplicate = userService.getUserByMobile(user.getMobile());
+        final UserBean duplicate = userService.getUserByMobile(user.getMobile());
         if ((duplicate != null) && !duplicate.getId().equals(userId)) {
           br.rejectValue("mobile", "Duplicate.user.mobile");
         }
@@ -354,6 +360,7 @@ public class UserController {
           existUser.setMobile(user.getMobile());
           existUser.setName(user.getName());
           existUser.setRole(user.getRole());
+          existUser.setGroup(user.getGroup());
           existUser.setStatus(user.getStatus());
           existUser.setUpdateTime(new Date());
           userService.saveUser(existUser);
@@ -365,6 +372,7 @@ public class UserController {
         }
       }
       mav.addObject("user", user);
+      mav.addObject("allGroups", groupService.getAvailableGroups());
     }
     return mav;
   }
@@ -373,8 +381,8 @@ public class UserController {
   public ModelAndView deleteUser(@PathVariable("user_id") Integer userId,
       HttpSession session) {
     final ModelAndView mav = new ModelAndView("redirect:" + Route.BG_USERS);
-    final User me = WebConfig.getUserInSession(session);
-    final User user = userService.getUserById(userId);
+    final UserBean me = WebConfig.getBackgroundUserInSession(session);
+    final UserBean user = userService.getUserById(userId);
     if (user == null) {
       mav.setViewName("redirect:/404.html");
     } else {
@@ -393,7 +401,7 @@ public class UserController {
       method = RequestMethod.GET)
   public ModelAndView changePwdForm(@PathVariable("user_id") Integer userId) {
     final ModelAndView mav = new ModelAndView("admin/change_user_pwd");
-    final User user = userService.getUserById(userId);
+    final UserBean user = userService.getUserById(userId);
     if (user == null) {
       mav.setViewName("redirect:/404.html");
     } else if (user.getRole() != UserRole.MobileUser) {
@@ -409,9 +417,9 @@ public class UserController {
       method = RequestMethod.POST)
   public ModelAndView changePwd(
       @PathVariable("user_id") Integer userId,
-      @ModelAttribute("user") User user) {
+      @ModelAttribute("user") UserBean user) {
     final ModelAndView mav = new ModelAndView("admin/change_user_pwd");
-    final User localUser = userService.getUserById(userId);
+    final UserBean localUser = userService.getUserById(userId);
     if (localUser == null) {
       mav.setViewName("redirect:/404.html");
     } else if (localUser.getRole() != UserRole.MobileUser) {

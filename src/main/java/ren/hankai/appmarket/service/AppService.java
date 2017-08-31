@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,12 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ren.hankai.appmarket.persist.AppRepository;
 import ren.hankai.appmarket.persist.AppRepository.AppSpecs;
-import ren.hankai.appmarket.persist.model.App;
+import ren.hankai.appmarket.persist.UserGroupRepository;
+import ren.hankai.appmarket.persist.UserRepository;
+import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
+import ren.hankai.appmarket.persist.model.UserBean;
+import ren.hankai.appmarket.persist.model.UserGroupBean;
 import ren.hankai.appmarket.persist.support.EntitySpecs;
 import ren.hankai.appmarket.persist.util.PageUtil;
 import ren.hankai.appmarket.util.MobileAppInfo;
@@ -24,7 +29,12 @@ import ren.hankai.cordwood.core.Preferences;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  * App业务逻辑。
@@ -42,6 +52,12 @@ public class AppService {
   private AppRepository appRepo;
   @Autowired
   private MobileAppScanner appScanner;
+  @Autowired
+  private UserGroupRepository userGroupRepo;
+  @Autowired
+  private EntityManager entityManager;
+  @Autowired
+  private UserRepository userRepo;
 
   /**
    * TODO Missing method description。
@@ -51,8 +67,12 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:23 PM
    */
-  public App getAppById(Integer id) {
-    return appRepo.findOne(id);
+  public AppBean getAppById(Integer id) {
+    final AppBean appBean = appRepo.findOne(id);
+    for (final UserGroupBean gb : appBean.getUserGroups()) {
+      appBean.getGroupIds().add(gb.getId());
+    }
+    return appBean;
   }
 
   /**
@@ -63,7 +83,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:25 PM
    */
-  public App getAppBySku(String sku) {
+  public AppBean getAppBySku(String sku) {
     return appRepo.findFirst(EntitySpecs.field("sku", sku));
   }
 
@@ -75,7 +95,7 @@ public class AppService {
    * @author hankai
    * @since Aug 3, 2017 3:12:34 PM
    */
-  public App getAppByName(String name) {
+  public AppBean getAppByName(String name) {
     return appRepo.findFirst(EntitySpecs.field("name", name));
   }
 
@@ -88,7 +108,7 @@ public class AppService {
    * @since May 15, 2017 2:33:28 PM
    */
   @Transactional
-  public App saveApp(App app) {
+  public AppBean saveApp(AppBean app) {
     return appRepo.save(app);
   }
 
@@ -102,8 +122,21 @@ public class AppService {
    * @since May 15, 2017 6:12:07 PM
    */
   @Transactional
-  public App saveApp(App app, MobileAppInfo appInfo) {
-    final App savedApp = appRepo.save(app);
+  public AppBean saveApp(AppBean app, MobileAppInfo appInfo) {
+    for (final UserGroupBean gb : app.getUserGroups()) {
+      gb.getApps().remove(app);
+    }
+    app.getUserGroups().clear();
+    if (app.getGroupIds() != null) {
+      for (final Integer gid : app.getGroupIds()) {
+        final UserGroupBean gb = userGroupRepo.findOne(gid);
+        if (gb != null) {
+          gb.getApps().add(app);
+          app.getUserGroups().add(gb);
+        }
+      }
+    }
+    final AppBean savedApp = appRepo.save(app);
     try {
       if (appInfo != null) {
         final File bundleFile = new File(appInfo.getBundlePath());
@@ -134,7 +167,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 6:19:36 PM
    */
-  public String getAppBundlePath(App app) {
+  public String getAppBundlePath(AppBean app) {
     String name = app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
     String appPath =
@@ -157,7 +190,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 6:20:19 PM
    */
-  public String getAppIconPath(App app) {
+  public String getAppIconPath(AppBean app) {
     String name = app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
     final String iconPath =
@@ -234,24 +267,35 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:18 PM
    */
-  public Page<App> searchApps(String keyword, Pageable pageable) {
+  public Page<AppBean> searchApps(String keyword, Pageable pageable) {
     return appRepo.findAll(AppSpecs.byKeyword(keyword), pageable);
   }
 
   /**
    * 查询可在前台访问的app（若不设置分页，则返回按更新时间降序排列后的前20个app）。
    *
+   * @param userId 当前登录的用户ID
    * @param pageable 分页
    *
    * @return 应用列表
    * @author hankai
    * @since Apr 5, 2016 5:28:23 PM
    */
-  public Page<App> getAvailableApps(Pageable pageable) {
+  public Page<AppBean> getAvailableApps(Integer userId, Pageable pageable) {
     if (pageable == null) {
       pageable = PageUtil.pageWithIndexAndSize(1, 20, "updateTime", false);
     }
-    return appRepo.findAll(AppSpecs.readyToSaleApps(), pageable);
+    final UserBean user = userRepo.findOne(userId);
+    if (user != null) {
+      final TypedQuery<AppBean> query = entityManager.createQuery(
+          "select app from AppBean app inner join app.userGroups groups where groups.id=:userGroupId",
+          AppBean.class);
+      query.setParameter("userGroupId", user.getGroup().getId());
+      query.setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize());
+      final List<AppBean> apps = query.getResultList();
+      return new PageImpl<>(apps);
+    }
+    return new PageImpl<>(new ArrayList<AppBean>());
   }
 
 }

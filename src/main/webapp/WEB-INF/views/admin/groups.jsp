@@ -10,10 +10,10 @@
     </jsp:attribute>
     <jsp:attribute name="pageDidLoad">
         <script type="text/javascript">
-            $('#miUsers').addClass('active');
+            $('#miUserGroups').addClass('active');
             <!--// 必须用JS来初始化表格，因为通过HTML属性来初始化，本地化JS的执行会滞后，因而失效 -->
             $('#dataTable').bootstrapTable({
-                url: 'admin/users.json',
+                url: 'admin/groups.json',
                 sidePagination: 'server',
                 showRefresh: true,
                 pageSize: 50,
@@ -27,58 +27,21 @@
                     sortable: false,
                     valign: 'middle'
                 }, {
-                    field: 'mobile',
-                    title: '手机号',
+                    field: 'name',
+                    title: '用户组',
                     valign: 'middle',
                     sortable: true,
                     formatter: function (value, row, index) {
-                        return '<a href="/admin/users/' + row.id + '/edit">' + value + '</a>';
-                    }
+                      return '<a href="admin/groups/' + row.id + '/edit">' + value + '</a>';
+                  }
                 }, {
-                    field: 'name',
-                    title: '姓名',
-                    valign: 'middle',
-                    sortable: true
-                }, {
-                    field: 'roleName',
-                    title: '角色',
-                    valign: 'middle',
-                    sortable: false
-                }, {
-                    title: '用户组',
-                    valign: 'middle',
-                    sortable: false,
-                    formatter: function (value, row, index) {
-                      return row.group.name;
-                    }
-                }, {
-                    field: 'statusName',
-                    title: '状态',
-                    valign: 'middle',
-                    sortable: false
-                }, {
-                    field: 'createTime',
-                    title: '创建时间',
-                    valign: 'middle',
-                    sortable: false
-                }, {
-                    field: 'updateTime',
-                    title: '更新时间',
-                    valign: 'middle',
-                    sortable: false,
-                    visible: false
-                }, {
-                    title: '操作',
-                    valign: 'middle',
-                    sortable: false,
-                    formatter: function (value, row, index) {
-                        if (row.role == 1) {
-                            return '<a href="/admin/users/' + row.id + '/change_pwd">修改密码</a>';
-                        } else {
-                            return '-';
-                        }
-                    }
-                }]
+                  title: '用户数',
+                  valign: 'middle',
+                  sortable: false,
+                  formatter: function (value, row, index) {
+                    return row.numberOfUsers;
+                }
+              }]
             });
         </script>
     </jsp:attribute>
@@ -86,7 +49,7 @@
         <div class="row">
             <ol class="breadcrumb">
                 <li><a href=""><span class="glyphicon glyphicon-home"></span></a></li>
-                <li>前台用户管理</li>
+                <li>用户组管理</li>
             </ol>
         </div><!--/.row-->
         <div class="row">
@@ -94,10 +57,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="columns btn-group pull-left">
-                            <a href="/admin/users/add">
-                                <button class="btn btn-info" type="button" title="添加用户">
+                            <a href="/admin/groups/add">
+                                <button class="btn btn-info" type="button" title="添加用户组">
                                     <i class="glyphicon glyphicon-plus"></i>
-                                    添加用户
+                                    添加用户组
                                 </button>
                             </a>
                         </div>

@@ -83,7 +83,10 @@
             </li>
             <li role="presentation" class="divider"></li>
             <li id="miUsers">
-                <a href="/admin/users"><span class="glyphicon glyphicon-cog"></span>用户管理</a>
+                <a href="/admin/users"><span class="glyphicon glyphicon-user"></span>用户管理</a>
+            </li>
+            <li id="miUserGroups">
+                <a href="/admin/groups"><span class="glyphicon glyphicon-cog"></span>用户组管理</a>
             </li>
         </ul>
         <div class="attribution"><a href="http://www.sparksoft.com.cn" target="_blank">© 2015 江苏星网软件有限公司</a></div>

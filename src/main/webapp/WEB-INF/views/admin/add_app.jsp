@@ -7,14 +7,21 @@
 <t:background>
     <jsp:attribute name="linkResources">
         <link href="css/bootstrap-switch.min.css" rel="stylesheet" />
+        <link href="css/chosen.css" rel="stylesheet" />
     </jsp:attribute>
     <jsp:attribute name="linkScripts">
         <script type="text/javascript" src="js/jquery.ui.widget.js"><!--//--></script>
         <script type="text/javascript" src="js/jquery.iframe-transport.js"><!--//--></script>
+        <script type="text/javascript" src="js/chosen.jquery.js"><!--//--></script>
     </jsp:attribute>
     <jsp:attribute name="pageDidLoad">
         <script type="text/javascript">
             $('#miApps').addClass('active');
+            
+            $('.chosen-select').chosen({
+              no_results_text: '没有匹配的结果',
+              disable_search_threshold: 5
+            });
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -77,6 +84,12 @@
                                     <label>配置信息 </label>
                                     <form:textarea path="metaData" rows="8" cssClass="form-control" maxlength="800" placeholder="APP 配置信息，如 XML/JSON 格式的标记信息" />
                                     <form:errors cssClass="field-error" path="metaData" />
+                                </div>
+                                <div class="form-group">
+                                    <label>对哪些用户组可见 </label>
+                                    <form:select path="groupIds" data-placeholder="选择用户组" cssClass="chosen-select form-control" multiple="multiple">
+                                        <form:options items="${ allGroups }" itemValue="id" itemLabel="name"/>
+                                    </form:select>
                                 </div>
                                 <div class="form-group">
                                     <label>状态 <span class="fg-red">*</span></label>

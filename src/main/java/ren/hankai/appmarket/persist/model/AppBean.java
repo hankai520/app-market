@@ -15,18 +15,24 @@ import org.springframework.web.multipart.MultipartFile;
 import ren.hankai.appmarket.util.DateTimeSerializer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -46,13 +52,18 @@ import javax.validation.constraints.Size;
     size = 1024 * 16,
     expiry = 1000 * 60 * 2,
     coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
-public class App implements Serializable {
+public class AppBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(
       strategy = GenerationType.IDENTITY)
   private Integer id;
+
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "apps", cascade = CascadeType.ALL)
+  @NotNull
+  private List<UserGroupBean> userGroups;
+
   /**
    * 应用sku
    */
@@ -131,6 +142,9 @@ public class App implements Serializable {
   private String metaData;
   private boolean enableUpdateCheck; // 支持更新检查
 
+  @Transient
+  private List<Integer> groupIds = new ArrayList<>();
+
   /**
    * 获取 id 字段的值。
    *
@@ -147,6 +161,24 @@ public class App implements Serializable {
    */
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  /**
+   * 获取 userGroups 字段的值。
+   *
+   * @return userGroups 字段值
+   */
+  public List<UserGroupBean> getUserGroups() {
+    return userGroups;
+  }
+
+  /**
+   * 设置 userGroups 字段的值。
+   *
+   * @param userGroups userGroups 字段的值
+   */
+  public void setUserGroups(List<UserGroupBean> userGroups) {
+    this.userGroups = userGroups;
   }
 
   /**
@@ -385,6 +417,24 @@ public class App implements Serializable {
    */
   public void setEnableUpdateCheck(boolean enableUpdateCheck) {
     this.enableUpdateCheck = enableUpdateCheck;
+  }
+
+  /**
+   * 获取 groupIds 字段的值。
+   *
+   * @return groupIds 字段值
+   */
+  public List<Integer> getGroupIds() {
+    return groupIds;
+  }
+
+  /**
+   * 设置 groupIds 字段的值。
+   *
+   * @param groupIds groupIds 字段的值
+   */
+  public void setGroupIds(List<Integer> groupIds) {
+    this.groupIds = groupIds;
   }
 
   /**

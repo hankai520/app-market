@@ -1,9 +1,3 @@
-/*
- * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
- * http://www.sparksoft.com.cn
- */
-
 package ren.hankai.appmarket.config;
 
 /**
@@ -41,6 +35,15 @@ public final class Route {
       + "/users/{user_id}/change_pwd";
   public static final String BG_DELETE_USER =
       BACKGROUND_PREFIX + "/users/{user_id}/delete";
+
+  public static final String BG_USER_GROUPS = BACKGROUND_PREFIX + "/groups";
+  public static final String BG_USER_GROUPS_JSON = BACKGROUND_PREFIX + "/groups.json";
+  public static final String BG_ADD_GROUP = BACKGROUND_PREFIX + "/groups/add";
+  public static final String BG_EDIT_GROUP =
+      BACKGROUND_PREFIX + "/groups/{group_id}/edit";
+  public static final String BG_DELETE_GROUP =
+      BACKGROUND_PREFIX + "/groups/{group_id}/delete";
+
   public static final String FOREGROUND_PREFIX = "/market";
   public static final String FG_APPS = FOREGROUND_PREFIX + "/apps";
   public static final String FG_LOGIN = FOREGROUND_PREFIX + "/login";

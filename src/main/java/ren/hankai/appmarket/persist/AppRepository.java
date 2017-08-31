@@ -9,7 +9,7 @@ package ren.hankai.appmarket.persist;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
-import ren.hankai.appmarket.persist.model.App;
+import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppStatus;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -25,7 +25,7 @@ import javax.persistence.criteria.Root;
  * @since Jul 17, 2015 9:21:02 AM
  */
 @Transactional
-public interface AppRepository extends BaseRepository<App, Integer> {
+public interface AppRepository extends BaseRepository<AppBean, Integer> {
 
   /**
    * TODO Missing type description。
@@ -44,11 +44,11 @@ public interface AppRepository extends BaseRepository<App, Integer> {
      * @author hankai
      * @since May 15, 2017 2:41:52 PM
      */
-    public static Specification<App> byKeyword(String keyword) {
-      return new Specification<App>() {
+    public static Specification<AppBean> byKeyword(String keyword) {
+      return new Specification<AppBean>() {
 
         @Override
-        public Predicate toPredicate(Root<App> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
           final String fuzzyKeyword = "%" + keyword + "%";
           Predicate pre = null;
           if (!StringUtils.isEmpty(keyword)) {
@@ -69,11 +69,11 @@ public interface AppRepository extends BaseRepository<App, Integer> {
      * @author hankai
      * @since May 15, 2017 2:41:50 PM
      */
-    public static final Specification<App> readyToSaleApps() {
-      return new Specification<App>() {
+    public static final Specification<AppBean> readyToSaleApps() {
+      return new Specification<AppBean>() {
 
         @Override
-        public Predicate toPredicate(Root<App> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
           return cb.equal(root.get("status"), AppStatus.ReadyToSale);
         }
 

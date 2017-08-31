@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import ren.hankai.appmarket.interceptor.AdministrationInterceptor;
 import ren.hankai.appmarket.interceptor.SiteAccessInterceptor;
-import ren.hankai.appmarket.persist.model.User;
+import ren.hankai.appmarket.persist.model.UserBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,17 +123,34 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   }
 
   /**
-   * 获取会话中的用户信息
+   * 获取会话中的后台用户信息
    *
    * @param session 会话
    * @return 用户
    * @author hankai
    * @since Jul 3, 2016 11:36:35 AM
    */
-  public static User getUserInSession(HttpSession session) {
+  public static UserBean getBackgroundUserInSession(HttpSession session) {
     final Object userObj = session.getAttribute(WebConfig.SESSION_KEY_BG_USER);
-    if ((userObj != null) && (userObj instanceof User)) {
-      final User user = (User) userObj;
+    if ((userObj != null) && (userObj instanceof UserBean)) {
+      final UserBean user = (UserBean) userObj;
+      return user;
+    }
+    return null;
+  }
+
+  /**
+   * 获取会话中的前台用户信息。
+   *
+   * @param session 会话
+   * @return 用户
+   * @author hankai
+   * @since Aug 31, 2017 5:33:04 PM
+   */
+  public static UserBean getForegroundUserInSession(HttpSession session) {
+    final Object userObj = session.getAttribute(WebConfig.SESSION_KEY_FG_USER);
+    if ((userObj != null) && (userObj instanceof UserBean)) {
+      final UserBean user = (UserBean) userObj;
       return user;
     }
     return null;

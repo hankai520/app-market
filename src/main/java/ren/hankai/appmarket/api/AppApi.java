@@ -28,7 +28,7 @@ import ren.hankai.appmarket.api.payload.ApiCode;
 import ren.hankai.appmarket.api.payload.ApiResponse;
 import ren.hankai.appmarket.api.payload.BusinessError;
 import ren.hankai.appmarket.config.Route;
-import ren.hankai.appmarket.persist.model.App;
+import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
 import ren.hankai.appmarket.service.AppService;
 import ren.hankai.appmarket.util.MobileAppInfo;
@@ -60,7 +60,7 @@ public class AppApi {
   @RequestMapping(value = {Route.API_APP_IOS_PACKAGE, Route.API_APP_ANDROID_PACKAGE},
       produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
   public ResponseEntity<FileSystemResource> getAppPackage(@PathVariable("appId") Integer appId) {
-    final App app = appService.getAppById(appId);
+    final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String path = appService.getAppBundlePath(app);
       return new ResponseEntity<>(new FileSystemResource(path), HttpStatus.OK);
@@ -71,7 +71,7 @@ public class AppApi {
 
   @RequestMapping(value = {Route.API_APP_ICON}, produces = {MediaType.IMAGE_PNG_VALUE})
   public ResponseEntity<FileSystemResource> getAppIcon(@PathVariable("appId") Integer appId) {
-    final App app = appService.getAppById(appId);
+    final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String path = appService.getAppIconPath(app);
       return new ResponseEntity<>(new FileSystemResource(path), HttpStatus.OK);
@@ -83,7 +83,7 @@ public class AppApi {
   @RequestMapping(value = Route.API_IOS_MANIFEST, produces = {MediaType.TEXT_XML_VALUE})
   public ResponseEntity<String> generateIosManifest(@PathVariable("appId") Integer appId,
       HttpServletRequest request) {
-    final App app = appService.getAppById(appId);
+    final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String baseUrl = request.getScheme() + "://" + request.getServerName() + ":"
           + request.getServerPort() + request.getContextPath();
@@ -118,7 +118,7 @@ public class AppApi {
   public ApiResponse getAppMetaData(@PathVariable("sku") String sku) {
     final ApiResponse response = new ApiResponse();
     try {
-      final App app = appService.getAppBySku(sku);
+      final AppBean app = appService.getAppBySku(sku);
       if (app != null) {
         if (!app.isEnableUpdateCheck()) {
           response.getBody().setError(BusinessError.AppNotFound);
@@ -142,7 +142,7 @@ public class AppApi {
   public ResponseEntity<String> updateApp(@PathVariable("sku") String sku,
       @RequestPart("package") MultipartFile file) {
     try {
-      final App app = appService.getAppBySku(sku);
+      final AppBean app = appService.getAppBySku(sku);
       if (app != null) {
         if ((file != null) && (file.getSize() > 0)
             && file.getOriginalFilename().matches("(?i)^.*(\\.ipa|\\.apk)$")) {
