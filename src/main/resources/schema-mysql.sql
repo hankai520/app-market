@@ -40,8 +40,8 @@ COMMENT = '用户';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `appmarket`.`apps` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `sku` VARCHAR(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL UNIQUE,
+  `sku` VARCHAR(45) NOT NULL UNIQUE,
   `version` VARCHAR(25) NOT NULL,
   `createTime` DATETIME NOT NULL,
   `updateTime` DATETIME NULL,

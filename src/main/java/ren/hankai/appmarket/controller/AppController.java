@@ -122,12 +122,11 @@ public class AppController {
       try {
         final MobileAppInfo mai = appService.saveAppPackage(app.getPlatform(),
             app.getPackageFile());
-        app.setBundleIdentifier(mai.getBundleId());
-        app.setVersion(mai.getVersion());
-        app.setCreateTime(new Date());
-        appService.saveApp(app, mai);
-        if ((mai != null) && !FileUtils.deleteQuietly(new File(mai.getBundlePath()))) {
-          logger.error("Failed to delete uploaded package at path: " + mai.getBundlePath());
+        if (mai != null) {
+          app.setBundleIdentifier(mai.getBundleId());
+          app.setVersion(mai.getVersion());
+          app.setCreateTime(new Date());
+          appService.saveApp(app, mai);
         }
         mav.addObject(WebConfig.WEB_PAGE_MESSAGE,
             messageSource.getMessage("operation.success", null, null));

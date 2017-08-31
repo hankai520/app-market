@@ -1,6 +1,7 @@
 
 package ren.hankai.appmarket.service;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,18 @@ public class AppService {
   /**
    * TODO Missing method description。
    *
+   * @param name
+   * @return
+   * @author hankai
+   * @since Aug 3, 2017 3:12:34 PM
+   */
+  public App getAppByName(String name) {
+    return appRepo.findFirst(EntitySpecs.field("name", name));
+  }
+
+  /**
+   * TODO Missing method description。
+   *
    * @param app
    * @return
    * @author hankai
@@ -97,6 +110,9 @@ public class AppService {
         if (bundleFile.exists()) {
           final String appPath = getAppBundlePath(savedApp);
           FileCopyUtils.copy(bundleFile, new File(appPath));
+          if (!FileUtils.deleteQuietly(bundleFile)) {
+            logger.error("Failed to delete uploaded package at path: " + appInfo.getBundlePath());
+          }
         }
         if ((appInfo.getIcon() != null) && (appInfo.getIcon().length > 0)) {
           final String iconPath = getAppIconPath(savedApp);
@@ -172,13 +188,13 @@ public class AppService {
    */
   public String getRandomAppPackageCachePath() {
     final String fileName = System.currentTimeMillis() + new Random().nextInt(9999) + 1000 + "";
-    final String path = String.format("%s/%s", Preferences.getAttachmentDir(), fileName);
+    final String path = String.format("%s/%s", Preferences.getCacheDir(), fileName);
     return path;
   }
 
 
   /**
-   * 保存 APP 安装包并解析APP安装包信息
+   * 保存 APP 安装包并解析APP安装包信息，安装包将被保存到缓存目录。
    *
    * @param appId 应用ID
    * @param platform 应用运行平台
@@ -190,16 +206,18 @@ public class AppService {
   public MobileAppInfo saveAppPackage(AppPlatform platform, MultipartFile packageFile) {
     MobileAppInfo mai = null;
     try {
-      final String path = getRandomAppPackageCachePath();
-      final FileOutputStream fos = new FileOutputStream(path);
-      FileCopyUtils.copy(packageFile.getInputStream(), fos);
-      if (platform == AppPlatform.Android) {
-        mai = appScanner.scanAndroidApk(path);
-      } else if (platform == AppPlatform.iOS) {
-        mai = appScanner.scanIosIpa(path);
-      }
-      if (mai != null) {
-        mai.setBundlePath(path);
+      if ((packageFile != null) && (packageFile.getSize() > 0)) {
+        final String path = getRandomAppPackageCachePath();
+        final FileOutputStream fos = new FileOutputStream(path);
+        FileCopyUtils.copy(packageFile.getInputStream(), fos);
+        if (platform == AppPlatform.Android) {
+          mai = appScanner.scanAndroidApk(path);
+        } else if (platform == AppPlatform.iOS) {
+          mai = appScanner.scanIosIpa(path);
+        }
+        if (mai != null) {
+          mai.setBundlePath(path);
+        }
       }
     } catch (final IOException e) {
       logger.error("Failed to save app package.", e);

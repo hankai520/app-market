@@ -56,9 +56,7 @@ public class App implements Serializable {
   /**
    * 应用sku
    */
-  @Column(
-      length = 45,
-      nullable = false)
+  @Column(length = 45, nullable = false, unique = true)
   @Size(
       min = 1,
       max = 20)
@@ -68,9 +66,7 @@ public class App implements Serializable {
   /**
    * 应用名称
    */
-  @Column(
-      length = 45,
-      nullable = false)
+  @Column(length = 45, nullable = false, unique = true)
   @Size(
       min = 1,
       max = 20)

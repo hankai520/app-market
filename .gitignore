@@ -42,3 +42,5 @@ atlassian-ide-plugin.xml
 home
 home-not-set
 /.apt_generated/
+
+*.bak
