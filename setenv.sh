@@ -14,5 +14,5 @@ APP_HOME=$PRGDIR/data
 JAVA_EXEC=java
 
 # More arguments passed to spring boot or jvm
-EXTRA_ARGS=""
-#EXTRA_ARGS="--proxy.name=apps.sparksoft.com.cn --proxy.port=443 --proxy.scheme=https"
+#EXTRA_ARGS=""
+EXTRA_ARGS="--proxy.name=apps.sparksoft.com.cn --proxy.port=443 --proxy.scheme=https"
