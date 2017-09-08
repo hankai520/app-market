@@ -19,13 +19,20 @@ import javax.persistence.criteria.Root;
  */
 public interface UserGroupRepository extends BaseRepository<UserGroupBean, Integer> {
 
+  /**
+   * 用户仓库查询条件。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Sep 8, 2017 12:53:13 PM
+   */
   public class UserGroupSpecs {
 
     /**
-     * TODO Missing method description。
+     * 根据名称查询用户组。
      *
-     * @param name
-     * @return
+     * @param name 名称
+     * @return 查询条件
      * @author hankai
      * @since Aug 31, 2017 2:41:11 PM
      */
@@ -41,6 +48,14 @@ public interface UserGroupRepository extends BaseRepository<UserGroupBean, Integ
       };
     }
 
+    /**
+     * 用关键字查询用户组。
+     *
+     * @param keyword 关键字
+     * @return 查询条件
+     * @author hankai
+     * @since Sep 8, 2017 12:53:25 PM
+     */
     public static Specification<UserGroupBean> byKeyword(String keyword) {
       return new Specification<UserGroupBean>() {
 
@@ -56,6 +71,13 @@ public interface UserGroupRepository extends BaseRepository<UserGroupBean, Integ
       };
     }
 
+    /**
+     * 查询已启用的用户组。
+     *
+     * @return 查询条件
+     * @author hankai
+     * @since Sep 8, 2017 12:53:40 PM
+     */
     public static Specification<UserGroupBean> enabled() {
       return new Specification<UserGroupBean>() {
 

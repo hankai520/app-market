@@ -38,7 +38,7 @@ public class DatabaseInitializer {
   private UserGroupRepository userGroupRepo;
 
   /**
-   * TODO Missing method description。
+   * 初始化用户账号。
    *
    * @author hankai
    * @since May 15, 2017 5:51:11 PM

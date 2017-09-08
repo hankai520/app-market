@@ -28,19 +28,19 @@ import javax.persistence.criteria.Root;
 public interface AppRepository extends BaseRepository<AppBean, Integer> {
 
   /**
-   * TODO Missing type description。
+   * 应用仓库查询条件。
    *
    * @author hankai
-   * @version TODO Missing version number
+   * @version 1.0.0
    * @since May 15, 2017 2:41:56 PM
    */
   public class AppSpecs {
 
     /**
-     * TODO Missing method description。
+     * 按关键字搜索应用。
      *
-     * @param keyword
-     * @return
+     * @param keyword 关键字
+     * @return 查询条件
      * @author hankai
      * @since May 15, 2017 2:41:52 PM
      */
@@ -48,7 +48,8 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
       return new Specification<AppBean>() {
 
         @Override
-        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
           final String fuzzyKeyword = "%" + keyword + "%";
           Predicate pre = null;
           if (!StringUtils.isEmpty(keyword)) {
@@ -63,9 +64,9 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
     }
 
     /**
-     * TODO Missing method description。
+     * 查询已上架的应用。
      *
-     * @return
+     * @return 查询条件
      * @author hankai
      * @since May 15, 2017 2:41:50 PM
      */
@@ -73,7 +74,8 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
       return new Specification<AppBean>() {
 
         @Override
-        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
           return cb.equal(root.get("status"), AppStatus.ReadyToSale);
         }
 

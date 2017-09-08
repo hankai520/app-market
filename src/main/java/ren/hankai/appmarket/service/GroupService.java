@@ -27,10 +27,10 @@ public class GroupService {
   private UserGroupRepository userGroupRepo;
 
   /**
-   * TODO Missing method description。
+   * 根据ID查询用户组。
    *
-   * @param id
-   * @return
+   * @param id 用户组ID
+   * @return 用户组
    * @author hankai
    * @since May 15, 2017 2:46:24 PM
    */
@@ -39,10 +39,10 @@ public class GroupService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据用户组名称查询用户组。
    *
-   * @param mobile
-   * @return
+   * @param name 用户组名称
+   * @return 用户组
    * @author hankai
    * @since May 15, 2017 2:46:22 PM
    */
@@ -51,24 +51,23 @@ public class GroupService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据关键字搜索用户组。
    *
-   * @param role
-   * @param keyword
-   * @param pageable
-   * @return
+   * @param keyword 关键字
+   * @param pageable 分页
+   * @return 搜索结果
    * @author hankai
-   * @since May 15, 2017 2:50:25 PM
+   * @since Sep 8, 2017 1:00:05 PM
    */
   public Page<UserGroupBean> searchGroups(String keyword, Pageable pageable) {
     return userGroupRepo.findAll(UserGroupSpecs.byKeyword(keyword), pageable);
   }
 
   /**
-   * TODO Missing method description。
+   * 保存用户组。
    *
-   * @param user
-   * @return
+   * @param group 用户组信息
+   * @return 保存后的用户组
    * @author hankai
    * @since May 15, 2017 2:54:19 PM
    */
@@ -78,9 +77,9 @@ public class GroupService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据ID删除用户组。
    *
-   * @param id
+   * @param id 用户组ID
    * @author hankai
    * @since May 15, 2017 2:55:44 PM
    */
@@ -90,9 +89,9 @@ public class GroupService {
   }
 
   /**
-   * TODO Missing method description。
+   * 获取可用的用户组。
    *
-   * @return
+   * @return 用户组列表
    * @author hankai
    * @since Aug 31, 2017 4:12:59 PM
    */

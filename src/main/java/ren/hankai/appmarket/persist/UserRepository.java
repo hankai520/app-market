@@ -23,11 +23,11 @@ public interface UserRepository extends BaseRepository<UserBean, Integer> {
   public class UserSpecs {
 
     /**
-     * TODO Missing method description。
+     * 按关键字查询用户。
      *
-     * @param keyword
-     * @param role
-     * @return
+     * @param keyword 关键字
+     * @param role 用户角色
+     * @return 查询条件
      * @author hankai
      * @since May 15, 2017 2:48:34 PM
      */
@@ -35,7 +35,8 @@ public interface UserRepository extends BaseRepository<UserBean, Integer> {
       return new Specification<UserBean>() {
 
         @Override
-        public Predicate toPredicate(Root<UserBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<UserBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
           Predicate pre = null;
           if (role != null) {
             pre = cb.equal(root.get("role"), role);

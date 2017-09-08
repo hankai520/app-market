@@ -26,10 +26,10 @@ public class UserService {
   private UserRepository userRepo;
 
   /**
-   * TODO Missing method description。
+   * 根据ID查询用户。
    *
-   * @param id
-   * @return
+   * @param id 用户ID
+   * @return 用户信息
    * @author hankai
    * @since May 15, 2017 2:46:24 PM
    */
@@ -38,10 +38,10 @@ public class UserService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据手机号查询用户。
    *
-   * @param mobile
-   * @return
+   * @param mobile 手机号
+   * @return 用户信息
    * @author hankai
    * @since May 15, 2017 2:46:22 PM
    */
@@ -50,12 +50,12 @@ public class UserService {
   }
 
   /**
-   * TODO Missing method description。
+   * 按关键字搜索用户。
    *
-   * @param role
-   * @param keyword
-   * @param pageable
-   * @return
+   * @param role 用户角色
+   * @param keyword 关键字
+   * @param pageable 分页
+   * @return 用户信息列表
    * @author hankai
    * @since May 15, 2017 2:50:25 PM
    */
@@ -64,10 +64,10 @@ public class UserService {
   }
 
   /**
-   * TODO Missing method description。
+   * 保存用户信息。
    *
-   * @param user
-   * @return
+   * @param user 用户信息
+   * @return 保存后的用户信息
    * @author hankai
    * @since May 15, 2017 2:54:19 PM
    */
@@ -77,9 +77,9 @@ public class UserService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据用户ID删除用户。
    *
-   * @param id
+   * @param id 用户ID
    * @author hankai
    * @since May 15, 2017 2:55:44 PM
    */

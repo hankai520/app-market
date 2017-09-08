@@ -60,10 +60,10 @@ public class AppService {
   private UserRepository userRepo;
 
   /**
-   * TODO Missing method description。
+   * 根据ID查询应用，同时返回应用对哪些用户组可见。
    *
-   * @param id
-   * @return
+   * @param id 应用ID
+   * @return 查询条件
    * @author hankai
    * @since May 15, 2017 2:33:23 PM
    */
@@ -76,10 +76,10 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据SKU查询应用。
    *
-   * @param sku
-   * @return
+   * @param sku 应用SKU
+   * @return 应用信息
    * @author hankai
    * @since May 15, 2017 2:33:25 PM
    */
@@ -88,10 +88,10 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据名称查询应用。
    *
-   * @param name
-   * @return
+   * @param name 名称
+   * @return 应用信息
    * @author hankai
    * @since Aug 3, 2017 3:12:34 PM
    */
@@ -100,10 +100,10 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 保存应用。
    *
-   * @param app
-   * @return
+   * @param app 应用信息
+   * @return 保存后的应用信息
    * @author hankai
    * @since May 15, 2017 2:33:28 PM
    */
@@ -113,11 +113,11 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 保存应用及应用安装包元数据。
    *
-   * @param app
-   * @param appInfo
-   * @return
+   * @param app 应用
+   * @param appInfo 应用元数据
+   * @return 保存的应用信息
    * @author hankai
    * @since May 15, 2017 6:12:07 PM
    */
@@ -160,10 +160,10 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 获取应用的安装包路径。
    *
-   * @param app
-   * @return
+   * @param app 应用信息
+   * @return 安装包路径
    * @author hankai
    * @since May 15, 2017 6:19:36 PM
    */
@@ -183,10 +183,10 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 获取应用的logo图标文件路径。
    *
-   * @param app
-   * @return
+   * @param app 应用信息
+   * @return 图标文件路径
    * @author hankai
    * @since May 15, 2017 6:20:19 PM
    */
@@ -199,9 +199,9 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据ID删除应用。
    *
-   * @param id
+   * @param id 应用ID
    * @author hankai
    * @since May 15, 2017 2:38:21 PM
    */
@@ -211,7 +211,7 @@ public class AppService {
   }
 
   /**
-   * 获取应用包随机缓存路径
+   * 获取应用包随机缓存路径。
    *
    * @param appId 应用ID
    * @param platform 应用运行平台
@@ -259,11 +259,11 @@ public class AppService {
   }
 
   /**
-   * TODO Missing method description。
+   * 根据关键字搜索应用。
    *
-   * @param keyword
-   * @param pageable
-   * @return
+   * @param keyword 关键字
+   * @param pageable 分页
+   * @return 搜索结果
    * @author hankai
    * @since May 15, 2017 2:33:18 PM
    */
