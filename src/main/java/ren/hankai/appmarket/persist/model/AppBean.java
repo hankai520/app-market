@@ -60,7 +60,8 @@ public class AppBean implements Serializable {
       strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "apps", cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "apps",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @NotNull
   private List<UserGroupBean> userGroups;
 

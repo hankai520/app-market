@@ -49,7 +49,9 @@
                     valign: 'middle',
                     sortable: false,
                     formatter: function (value, row, index) {
-                      return row.group.name;
+                      if (row.group) {
+                        return row.group.name;
+                      }
                     }
                 }, {
                     field: 'statusName',
