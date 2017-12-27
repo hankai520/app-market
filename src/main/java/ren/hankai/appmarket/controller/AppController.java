@@ -232,7 +232,7 @@ public class AppController {
     final String path = request.getContextPath();
     final String basePath = request.getScheme() + "://"
         + request.getServerName() + ":" + request.getServerPort()
-        + path + "/";
+        + path;
     mav.addObject("basePath", basePath);
     final UserBean currentUser = WebConfig.getForegroundUserInSession(session);
     final Page<AppBean> results = appService.getAvailableApps(currentUser.getId(), null);

@@ -32,7 +32,7 @@
                                                 <c:choose>
                                                     <c:when test="${ app.platform.name() eq 'iOS' }">
                                                         <c:set var="packageUrl" 
-                                                        value="itms-services://?action=download-manifest&url=${ basePath }api/app/${ app.id }/ios_manifest.plist" />
+                                                        value="itms-services://?action=download-manifest&url=${ basePath }/api/app/${ app.id }/ios_manifest.plist" />
                                                     </c:when>
                                                     <c:when test="${ app.platform.name() eq 'Android' }">
                                                         <c:set var="packageUrl" value="${ basePath }/api/app/${ app.id }/package.apk" />
