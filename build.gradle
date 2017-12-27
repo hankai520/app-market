@@ -28,7 +28,7 @@ sourceSets {
 
 war {
     baseName = 'app-market'
-    version = '1.0.0.40'
+    version = '1.0.0.41'
 }
 
 sourceCompatibility = 1.8
