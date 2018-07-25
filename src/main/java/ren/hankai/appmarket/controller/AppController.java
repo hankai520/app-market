@@ -7,12 +7,16 @@
 package ren.hankai.appmarket.controller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +30,7 @@ import ren.hankai.appmarket.api.payload.PaginatedList;
 import ren.hankai.appmarket.config.Route;
 import ren.hankai.appmarket.config.WebConfig;
 import ren.hankai.appmarket.persist.model.AppBean;
+import ren.hankai.appmarket.persist.model.AppPlatform;
 import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.util.PageUtil;
 import ren.hankai.appmarket.service.AppService;
@@ -33,9 +38,11 @@ import ren.hankai.appmarket.service.GroupService;
 import ren.hankai.appmarket.util.MobileAppInfo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -56,6 +63,32 @@ public class AppController {
   private MessageSource messageSource;
   @Autowired
   private GroupService groupService;
+
+  @Value("${proxy.name}")
+  private String proxyName;
+  @Value("${proxy.port}")
+  private Integer proxyPort;
+  @Value("${proxy.scheme}")
+  private String proxyScheme;
+
+  /**
+   * 获取部署后的实际 web 根地址（地址不以 "/" 结尾）。
+   *
+   * @param request servlet 请求
+   * @return 根地址
+   * @author hankai
+   * @since Jul 25, 2018 8:42:05 PM
+   */
+  private String getActualBasePath(HttpServletRequest request) {
+    String basePath = null;
+    if (StringUtils.isNotEmpty(proxyName)) {
+      basePath = proxyScheme + "://" + proxyName + ":" + proxyPort;
+    } else {
+      basePath =
+          request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+    }
+    return basePath;
+  }
 
   @RequestMapping(Route.BG_APPS)
   public ModelAndView index() {
@@ -89,6 +122,7 @@ public class AppController {
           app.setStatusDesc(str);
           str = messageSource.getMessage(app.getPlatform().i18nKey(), null, null);
           app.setPlatformDesc(str);
+          app.setChecksum(appService.getAppBundleChecksum(app));
         }
       }
       response = new PaginatedList();
@@ -237,6 +271,44 @@ public class AppController {
     final UserBean currentUser = WebConfig.getForegroundUserInSession(session);
     final Page<AppBean> results = appService.getAvailableApps(currentUser.getId(), null);
     mav.addObject("apps", results.getContent());
+    return mav;
+  }
+
+  @RequestMapping(value = Route.BG_APP_QRCODE, produces = MediaType.IMAGE_PNG_VALUE)
+  public void showAppQrCode(@PathVariable("appId") Integer appId,
+      HttpServletRequest request, HttpServletResponse response) {
+    final AppBean app = appService.getAppById(appId);
+    if (app == null) {
+      response.setStatus(HttpStatus.NOT_FOUND.value());
+    } else {
+      try {
+        final String basePath = getActualBasePath(request);
+        final String url = basePath + Route.BG_DOWNLOAD_APP + "?sku=" + app.getSku();
+        appService.generateQrCodeForApp(url, response.getOutputStream());
+      } catch (final IOException ex) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      }
+    }
+  }
+
+  @RequestMapping(value = Route.BG_DOWNLOAD_APP)
+  public ModelAndView downloadApp(@RequestParam("sku") String sku, HttpServletRequest request) {
+    final ModelAndView mav = new ModelAndView("admin/download_app");
+    final AppBean app = appService.getAppBySku(sku);
+    if (app == null) {
+      mav.setViewName("redirect:/404.html");
+    } else {
+      final String basePath = getActualBasePath(request);
+      if (AppPlatform.Android == app.getPlatform()) {
+        mav.addObject("downloadUrl", basePath +
+            Route.API_APP_ANDROID_PACKAGE.replaceAll("\\{appId\\}", app.getId() + ""));
+      } else if (AppPlatform.iOS == app.getPlatform()) {
+        mav.addObject("downloadUrl", basePath +
+            Route.API_APP_IOS_PACKAGE.replaceAll("\\{appId\\}", app.getId() + ""));
+      } else {
+        mav.setViewName("redirect:/404.html");
+      }
+    }
     return mav;
   }
 }

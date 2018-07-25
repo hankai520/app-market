@@ -23,7 +23,7 @@ public class Application {
 
   public static void main(String[] args) {
     final String[] configs =
-        {"mysql.properties", "system.yml", "ehcache.xml", "i18n.properties"};
+        {"mysql.properties", "system.yml", "i18n.properties"};
     if (ApplicationInitializer.initialize(configs)) {
       SpringApplication.run(Application.class, args);
     }

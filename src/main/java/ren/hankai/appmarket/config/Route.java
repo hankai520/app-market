@@ -26,6 +26,7 @@ public final class Route {
   public static final String BG_APP_EDIT = BACKGROUND_PREFIX + "/apps/{appId}/edit";
   public static final String BG_APP_DELETE =
       BACKGROUND_PREFIX + "/apps/{appId}/delete";
+  public static final String BG_APP_QRCODE = BACKGROUND_PREFIX + "/apps/{appId}/qrcode.png";
   public static final String BG_USERS = BACKGROUND_PREFIX + "/users";
   public static final String BG_USERS_JSON = BACKGROUND_PREFIX + "/users.json";
   public static final String BG_ADD_USER = BACKGROUND_PREFIX + "/users/add";
@@ -43,6 +44,7 @@ public final class Route {
       BACKGROUND_PREFIX + "/groups/{group_id}/edit";
   public static final String BG_DELETE_GROUP =
       BACKGROUND_PREFIX + "/groups/{group_id}/delete";
+  public static final String BG_DOWNLOAD_APP = BACKGROUND_PREFIX + "/download_app";
 
   public static final String FOREGROUND_PREFIX = "/market";
   public static final String FG_APPS = FOREGROUND_PREFIX + "/apps";

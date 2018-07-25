@@ -55,6 +55,19 @@
                     valign: 'middle',
                     sortable: false
                 }, {
+                    field: 'checksum',
+                    title: 'SHA256',
+                    valign: 'middle',
+                    sortable: false,
+                    visible: false
+                }, {
+                    title: '二维码',
+                    valign: 'middle',
+                    sortable: false,
+                    formatter: function(value, row, index) {
+                      return '<a href="/admin/apps/' + row.id + '/qrcode.png" target="_blank">查看</a>';
+                    }
+                }, {
                   field: 'enableUpdateCheck',
                   title: '启用更新检查',
                   valign: 'middle',

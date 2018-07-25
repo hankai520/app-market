@@ -1,6 +1,13 @@
 
 package ren.hankai.appmarket.service;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +34,14 @@ import ren.hankai.appmarket.util.MobileAppScanner;
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.persistence.EntityManager;
@@ -168,7 +179,7 @@ public class AppService {
    * @since May 15, 2017 6:19:36 PM
    */
   public String getAppBundlePath(AppBean app) {
-    String name = app.getBundleIdentifier() + "_" + app.getVersion();
+    String name = app.getSku() + "_" + app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
     String appPath =
         Preferences.getAttachmentDir() + File.separator + name;
@@ -180,6 +191,28 @@ public class AppService {
       appPath += ".unknown";
     }
     return appPath;
+  }
+
+  /**
+   * 获取App安装包的校验和。
+   *
+   * @param app app信息
+   * @return SHA256 校验和
+   * @author hankai
+   * @since Jul 25, 2018 7:16:01 PM
+   */
+  public String getAppBundleChecksum(AppBean app) {
+    final String path = getAppBundlePath(app);
+    final File file = new File(path);
+    if ((file != null) && file.exists()) {
+      try {
+        final String checksum = DigestUtils.sha256Hex(new FileInputStream(file));
+        return checksum;
+      } catch (final IOException ex) {
+        logger.warn("Failed to get checksum of app package " + path);
+      }
+    }
+    return "";
   }
 
   /**
@@ -296,6 +329,27 @@ public class AppService {
       return new PageImpl<>(apps);
     }
     return new PageImpl<>(new ArrayList<AppBean>());
+  }
+
+  /**
+   * 为 App 生成下载二维码。
+   *
+   * @param url 下载 URL（即二维码内容）
+   * @param outputStream 二维码图片输出流
+   * @author hankai
+   * @since Jul 25, 2018 7:59:57 PM
+   */
+  public void generateQrCodeForApp(String url, OutputStream outputStream) {
+    final QRCodeWriter qw = new QRCodeWriter();
+    final Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+    hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+    hints.put(EncodeHintType.MARGIN, 0);
+    try {
+      final BitMatrix bm = qw.encode(url, BarcodeFormat.QR_CODE, 300, 300, hints);
+      MatrixToImageWriter.writeToStream(bm, "PNG", outputStream);
+    } catch (final Exception ex) {
+      logger.error(String.format("Failed to generate qrcode for app url \"%s\".", url), ex);
+    }
   }
 
 }

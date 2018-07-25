@@ -145,6 +145,8 @@ public class AppBean implements Serializable {
 
   @Transient
   private List<Integer> groupIds = new ArrayList<>();
+  @Transient
+  private String checksum; // 安装包校验和
 
   /**
    * 获取 id 字段的值。
@@ -436,6 +438,14 @@ public class AppBean implements Serializable {
    */
   public void setGroupIds(List<Integer> groupIds) {
     this.groupIds = groupIds;
+  }
+
+  public String getChecksum() {
+    return checksum;
+  }
+
+  public void setChecksum(String checksum) {
+    this.checksum = checksum;
   }
 
   /**

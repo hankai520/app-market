@@ -112,7 +112,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(adminInterceptor)
         .addPathPatterns("/admin/**")
-        .excludePathPatterns(Route.BG_LOGIN);
+        .excludePathPatterns(Route.BG_LOGIN)
+        .excludePathPatterns(Route.BG_DOWNLOAD_APP);
     registry.addInterceptor(siteAccessInterceptor)
         .addPathPatterns("/market/**");
   }

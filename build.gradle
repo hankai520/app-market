@@ -48,7 +48,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-configuration-processor"
     compile "org.springframework:spring-context-support"
-    compile "net.sf.ehcache:ehcache:2.10.3"
     compile "org.freemarker:freemarker:2.3.23"
     compile "javax.servlet:jstl"
     compile "org.slf4j:slf4j-api"
@@ -61,6 +60,9 @@ dependencies {
     compile "org.apache.httpcomponents:httpclient:4.5"
     compile "com.googlecode.plist:dd-plist:1.16"
     compile "net.dongliu:apk-parser:2.1.2"
+    compile "com.google.zxing:core:3.3.0"
+    compile "com.google.zxing:javase:3.3.0"
+    
     compile files("libs/cordwood-core-0.0.1.RELEASE.jar")
     
     runtime "org.hsqldb:hsqldb:2.3.4"
