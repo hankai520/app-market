@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
@@ -32,6 +31,7 @@ import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
 import ren.hankai.appmarket.service.AppService;
 import ren.hankai.appmarket.util.MobileAppInfo;
+import ren.hankai.cordwood.core.cache.MiddleWeight;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +59,8 @@ public class AppApi {
 
   @RequestMapping(value = {Route.API_APP_IOS_PACKAGE, Route.API_APP_ANDROID_PACKAGE},
       produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-  public ResponseEntity<FileSystemResource> getAppPackage(@PathVariable("appId") Integer appId) {
+  public ResponseEntity<FileSystemResource> getAppPackage(
+      @PathVariable("appId") final Integer appId) {
     final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String path = appService.getAppBundlePath(app);
@@ -70,7 +71,7 @@ public class AppApi {
   }
 
   @RequestMapping(value = {Route.API_APP_ICON}, produces = {MediaType.IMAGE_PNG_VALUE})
-  public ResponseEntity<FileSystemResource> getAppIcon(@PathVariable("appId") Integer appId) {
+  public ResponseEntity<FileSystemResource> getAppIcon(@PathVariable("appId") final Integer appId) {
     final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String path = appService.getAppIconPath(app);
@@ -81,8 +82,8 @@ public class AppApi {
   }
 
   @RequestMapping(value = Route.API_IOS_MANIFEST, produces = {MediaType.TEXT_XML_VALUE})
-  public ResponseEntity<String> generateIosManifest(@PathVariable("appId") Integer appId,
-      HttpServletRequest request) {
+  public ResponseEntity<String> generateIosManifest(@PathVariable("appId") final Integer appId,
+      final HttpServletRequest request) {
     final AppBean app = appService.getAppById(appId);
     if (app != null) {
       final String baseUrl = request.getScheme() + "://" + request.getServerName() + ":"
@@ -113,9 +114,10 @@ public class AppApi {
     }
   }
 
+  @MiddleWeight
   @RequestMapping(value = Route.API_APP_METADATA, produces = {"application/json; charset=utf-8"})
   @ResponseBody
-  public ApiResponse getAppMetaData(@PathVariable("sku") String sku) {
+  public ApiResponse getAppMetaData(@PathVariable("sku") final String sku) {
     final ApiResponse response = new ApiResponse();
     try {
       final AppBean app = appService.getAppBySku(sku);
@@ -139,8 +141,8 @@ public class AppApi {
   }
 
   @RequestMapping(value = Route.API_UPDATE_APP)
-  public ResponseEntity<String> updateApp(@PathVariable("sku") String sku,
-      @RequestPart("package") MultipartFile file) {
+  public ResponseEntity<String> updateApp(@PathVariable("sku") final String sku,
+      @RequestPart("package") final MultipartFile file) {
     try {
       final AppBean app = appService.getAppBySku(sku);
       if (app != null) {

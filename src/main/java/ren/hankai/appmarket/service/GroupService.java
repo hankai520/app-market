@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ren.hankai.appmarket.persist.UserGroupRepository;
 import ren.hankai.appmarket.persist.UserGroupRepository.UserGroupSpecs;
 import ren.hankai.appmarket.persist.model.UserGroupBean;
-import ren.hankai.appmarket.persist.support.EntitySpecs;
+import ren.hankai.cordwood.data.domain.EntitySpecs;
 
 import java.util.List;
 

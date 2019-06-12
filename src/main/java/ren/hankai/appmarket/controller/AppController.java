@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
@@ -79,7 +78,7 @@ public class AppController {
    * @author hankai
    * @since Jul 25, 2018 8:42:05 PM
    */
-  private String getActualBasePath(HttpServletRequest request) {
+  private String getActualBasePath(final HttpServletRequest request) {
     String basePath = null;
     if (StringUtils.isNotEmpty(proxyName)) {
       basePath = proxyScheme + "://" + proxyName + ":" + proxyPort;
@@ -102,15 +101,15 @@ public class AppController {
   public PaginatedList getAppList(
       @RequestParam(
           value = "search",
-          required = false) String search,
+          required = false) final String search,
       @RequestParam(
           value = "order",
-          required = false) String order,
+          required = false) final String order,
       @RequestParam(
           value = "sort",
-          required = false) String sort,
-      @RequestParam("limit") int limit,
-      @RequestParam("offset") int offset) {
+          required = false) final String sort,
+      @RequestParam("limit") final int limit,
+      @RequestParam("offset") final int offset) {
     PaginatedList response = null;
     try {
       final boolean asc = "asc".equalsIgnoreCase(order);
@@ -122,7 +121,6 @@ public class AppController {
           app.setStatusDesc(str);
           str = messageSource.getMessage(app.getPlatform().i18nKey(), null, null);
           app.setPlatformDesc(str);
-          app.setChecksum(appService.getAppBundleChecksum(app));
         }
       }
       response = new PaginatedList();
@@ -150,8 +148,8 @@ public class AppController {
       value = Route.BG_APP_ADD,
       method = RequestMethod.POST)
   public ModelAndView addApp(
-      @ModelAttribute("app") @Valid AppBean app,
-      BindingResult br) {
+      @ModelAttribute("app") @Valid final AppBean app,
+      final BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin/add_app");
     if (app.getPackageFile() == null) {
       br.rejectValue("packageFile", "NotNull.app.packageFile");
@@ -184,10 +182,11 @@ public class AppController {
   @RequestMapping(
       value = Route.BG_APP_EDIT,
       method = RequestMethod.GET)
-  public ModelAndView showEditAppForm(@PathVariable("appId") Integer appId) {
+  public ModelAndView showEditAppForm(@PathVariable("appId") final Integer appId) {
     final ModelAndView mav = new ModelAndView("admin/edit_app");
     final AppBean app = appService.getAppById(appId);
     if (app != null) {
+      // app.setChecksum(appService.getAppBundleChecksum(app));
       mav.addObject("app", app);
       mav.addObject("allGroups", groupService.getAvailableGroups());
     } else {
@@ -200,8 +199,8 @@ public class AppController {
       value = Route.BG_APP_EDIT,
       method = RequestMethod.POST)
   public ModelAndView editApp(
-      @PathVariable("appId") Integer appId,
-      @ModelAttribute("app") @Valid AppBean app, BindingResult br) {
+      @PathVariable("appId") final Integer appId,
+      @ModelAttribute("app") @Valid final AppBean app, final BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin/edit_app");
     final AppBean localApp = appService.getAppById(appId);
     if (localApp == null) {
@@ -249,7 +248,7 @@ public class AppController {
   @RequestMapping(
       value = Route.BG_APP_DELETE,
       method = RequestMethod.GET)
-  public ModelAndView deleteApp(@PathVariable("appId") Integer appId) {
+  public ModelAndView deleteApp(@PathVariable("appId") final Integer appId) {
     final ModelAndView mav = new ModelAndView("redirect:" + Route.BG_APPS);
     final AppBean app = appService.getAppById(appId);
     if (app == null) {
@@ -261,7 +260,7 @@ public class AppController {
   }
 
   @RequestMapping(Route.FG_APPS)
-  public ModelAndView foregroundIndex(HttpServletRequest request, HttpSession session) {
+  public ModelAndView foregroundIndex(final HttpServletRequest request, final HttpSession session) {
     final ModelAndView mav = new ModelAndView("site/apps");
     final String path = request.getContextPath();
     final String basePath = request.getScheme() + "://"
@@ -275,8 +274,8 @@ public class AppController {
   }
 
   @RequestMapping(value = Route.BG_APP_QRCODE, produces = MediaType.IMAGE_PNG_VALUE)
-  public void showAppQrCode(@PathVariable("appId") Integer appId,
-      HttpServletRequest request, HttpServletResponse response) {
+  public void showAppQrCode(@PathVariable("appId") final Integer appId,
+      final HttpServletRequest request, final HttpServletResponse response) {
     final AppBean app = appService.getAppById(appId);
     if (app == null) {
       response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -292,7 +291,8 @@ public class AppController {
   }
 
   @RequestMapping(value = Route.BG_DOWNLOAD_APP)
-  public ModelAndView downloadApp(@RequestParam("sku") String sku, HttpServletRequest request) {
+  public ModelAndView downloadApp(@RequestParam("sku") final String sku,
+      final HttpServletRequest request) {
     final ModelAndView mav = new ModelAndView("admin/download_app");
     final AppBean app = appService.getAppBySku(sku);
     if (app == null) {

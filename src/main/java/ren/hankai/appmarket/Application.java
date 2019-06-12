@@ -1,6 +1,5 @@
 /*
  * Copyright © 2015 Jiangsu Sparknet Software Co., Ltd, All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
@@ -21,10 +20,10 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
 @EnableConfigurationProperties
 public class Application {
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     final String[] configs =
         {"mysql.properties", "system.yml", "i18n.properties"};
-    if (ApplicationInitializer.initialize(configs)) {
+    if (ApplicationInitializer.initialize(false, configs)) {
       SpringApplication.run(Application.class, args);
     }
   }

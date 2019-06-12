@@ -6,7 +6,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -27,11 +26,11 @@ import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
 import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserGroupBean;
-import ren.hankai.appmarket.persist.support.EntitySpecs;
 import ren.hankai.appmarket.persist.util.PageUtil;
 import ren.hankai.appmarket.util.MobileAppInfo;
 import ren.hankai.appmarket.util.MobileAppScanner;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.data.domain.EntitySpecs;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +77,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:23 PM
    */
-  public AppBean getAppById(Integer id) {
+  public AppBean getAppById(final Integer id) {
     final AppBean appBean = appRepo.findOne(id);
     for (final UserGroupBean gb : appBean.getUserGroups()) {
       appBean.getGroupIds().add(gb.getId());
@@ -94,7 +93,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:25 PM
    */
-  public AppBean getAppBySku(String sku) {
+  public AppBean getAppBySku(final String sku) {
     return appRepo.findFirst(EntitySpecs.field("sku", sku));
   }
 
@@ -106,7 +105,7 @@ public class AppService {
    * @author hankai
    * @since Aug 3, 2017 3:12:34 PM
    */
-  public AppBean getAppByName(String name) {
+  public AppBean getAppByName(final String name) {
     return appRepo.findFirst(EntitySpecs.field("name", name));
   }
 
@@ -119,7 +118,7 @@ public class AppService {
    * @since May 15, 2017 2:33:28 PM
    */
   @Transactional
-  public AppBean saveApp(AppBean app) {
+  public AppBean saveApp(final AppBean app) {
     return appRepo.save(app);
   }
 
@@ -133,7 +132,7 @@ public class AppService {
    * @since May 15, 2017 6:12:07 PM
    */
   @Transactional
-  public AppBean saveApp(AppBean app, MobileAppInfo appInfo) {
+  public AppBean saveApp(final AppBean app, final MobileAppInfo appInfo) {
     for (final UserGroupBean gb : app.getUserGroups()) {
       gb.getApps().remove(app);
     }
@@ -178,7 +177,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 6:19:36 PM
    */
-  public String getAppBundlePath(AppBean app) {
+  public String getAppBundlePath(final AppBean app) {
     String name = app.getSku() + "_" + app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
     String appPath =
@@ -201,7 +200,7 @@ public class AppService {
    * @author hankai
    * @since Jul 25, 2018 7:16:01 PM
    */
-  public String getAppBundleChecksum(AppBean app) {
+  public String getAppBundleChecksum(final AppBean app) {
     final String path = getAppBundlePath(app);
     final File file = new File(path);
     if ((file != null) && file.exists()) {
@@ -223,7 +222,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 6:20:19 PM
    */
-  public String getAppIconPath(AppBean app) {
+  public String getAppIconPath(final AppBean app) {
     String name = app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
     final String iconPath =
@@ -239,7 +238,7 @@ public class AppService {
    * @since May 15, 2017 2:38:21 PM
    */
   @Transactional
-  public void deleteAppById(Integer id) {
+  public void deleteAppById(final Integer id) {
     appRepo.delete(id);
   }
 
@@ -258,7 +257,6 @@ public class AppService {
     return path;
   }
 
-
   /**
    * 保存 APP 安装包并解析APP安装包信息，安装包将被保存到缓存目录。
    *
@@ -269,7 +267,7 @@ public class AppService {
    * @author hankai
    * @since Apr 6, 2016 2:32:12 PM
    */
-  public MobileAppInfo saveAppPackage(AppPlatform platform, MultipartFile packageFile) {
+  public MobileAppInfo saveAppPackage(final AppPlatform platform, final MultipartFile packageFile) {
     MobileAppInfo mai = null;
     try {
       if ((packageFile != null) && (packageFile.getSize() > 0)) {
@@ -300,7 +298,7 @@ public class AppService {
    * @author hankai
    * @since May 15, 2017 2:33:18 PM
    */
-  public Page<AppBean> searchApps(String keyword, Pageable pageable) {
+  public Page<AppBean> searchApps(final String keyword, final Pageable pageable) {
     return appRepo.findAll(AppSpecs.byKeyword(keyword), pageable);
   }
 
@@ -314,7 +312,7 @@ public class AppService {
    * @author hankai
    * @since Apr 5, 2016 5:28:23 PM
    */
-  public Page<AppBean> getAvailableApps(Integer userId, Pageable pageable) {
+  public Page<AppBean> getAvailableApps(final Integer userId, Pageable pageable) {
     if (pageable == null) {
       pageable = PageUtil.pageWithIndexAndSize(1, 20, "updateTime", false);
     }
@@ -339,7 +337,7 @@ public class AppService {
    * @author hankai
    * @since Jul 25, 2018 7:59:57 PM
    */
-  public void generateQrCodeForApp(String url, OutputStream outputStream) {
+  public void generateQrCodeForApp(final String url, final OutputStream outputStream) {
     final QRCodeWriter qw = new QRCodeWriter();
     final Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
     hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");

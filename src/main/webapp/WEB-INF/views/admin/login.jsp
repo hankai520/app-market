@@ -80,6 +80,7 @@
             return true;
         }
     }
+    $('#loginId').focus();
     </script>
 </body>
 

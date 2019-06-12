@@ -9,6 +9,7 @@ package ren.hankai.appmarket.config;
  */
 public final class Route {
 
+  public static final String ERROR_PREFIX = "/error";
   private static final String API_PREFIX = "/api";
   public static final String API_IOS_MANIFEST =
       API_PREFIX + "/app/{appId}/ios_manifest.plist";

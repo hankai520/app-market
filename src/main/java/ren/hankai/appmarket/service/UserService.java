@@ -10,7 +10,7 @@ import ren.hankai.appmarket.persist.UserRepository;
 import ren.hankai.appmarket.persist.UserRepository.UserSpecs;
 import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserRole;
-import ren.hankai.appmarket.persist.support.EntitySpecs;
+import ren.hankai.cordwood.data.domain.EntitySpecs;
 
 /**
  * 用户业务逻辑。

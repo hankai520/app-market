@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 hankai.ren, All rights reserved.
- *
  * http://www.hankai.ren
  */
 
@@ -12,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.data.jpa.config.JpaDataSourceInfo;
 
 import javax.sql.DataSource;
 
@@ -53,7 +53,7 @@ public class InMemoryDataSourceConfig {
    * @since Oct 25, 2016 11:35:17 AM
    */
   @Bean
-  public DataSourceInfo dataSourceInfo() {
-    return new DataSourceInfo(HSQLPlatform.class.getName(), basePackages);
+  public JpaDataSourceInfo dataSourceInfo() {
+    return new JpaDataSourceInfo(HSQLPlatform.class.getName(), basePackages);
   }
 }

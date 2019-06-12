@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <appender name="console-appender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{12} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+    <!-- 系统日志：记录应用行为和错误 -->
+    <appender name="system-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${app.log}/system.txt</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{12} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 同一天超过文件大小限制，文件被分隔成多个，用序号i区分 -->
+            <fileNamePattern>${app.log}/system.%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 同一天内可能由于访问量较大，导致日志较多，控制文件大小 -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 保留多少天的日志归档 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <!-- SQL日志：记录Druid的SQL信息 -->
+    <appender name="sql-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${app.log}/sql.txt</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{12} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 同一天超过文件大小限制，文件被分隔成多个，用序号i区分 -->
+            <fileNamePattern>${app.log}/sql.%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 同一天内可能由于访问量较大，导致日志较多，控制文件大小 -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 保留多少天的日志归档 -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    
+    <!-- 根日志配置，同时写入控制台和文件 -->
+    <root level="INFO">
+        <appender-ref ref="console-appender" />
+        <appender-ref ref="system-appender"/>
+    </root>
+    <!-- 配置 Spring 框架和 Eclipselink 日志级别 -->
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.eclipse.persistence" level="ERROR" />
+    <!-- 配置应用日志级别 -->
+    <logger name="sparksoft" level="INFO">
+    </logger>
+    <!-- 以下日志写入独立日志文件 -->
+    <logger name="com.alibaba.druid.filter" level="WARN">
+        <appender-ref ref="sql-appender"/>
+    </logger>
+</configuration>

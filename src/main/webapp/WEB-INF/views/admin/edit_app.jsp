@@ -92,13 +92,24 @@
                                     <form:input path="version" cssClass="form-control" readonly="true" />
                                 </div>
                                 <div class="form-group">
-                                    <label>安装包 </label>
+                                    <label>安装包</label>
+                                    <%-- <c:if test="${ not empty app.checksum }"><p>校验和：${ app.checksum }</p></c:if> --%>
                                     <form:input path="packageFile" type="file" cssClass="form-control"/>
                                     <form:errors cssClass="field-error" path="packageFile" />
                                 </div>
                                 <div class="form-group">
                                     <label>配置信息 </label>
-                                    <form:textarea path="metaData" rows="8" cssClass="form-control" maxlength="800" placeholder="APP 配置信息，如 XML/JSON 格式的标记信息" />
+                                    <form:textarea path="metaData" rows="5" cssClass="form-control" maxlength="800" placeholder="APP 配置信息，如 XML/JSON 格式的标记信息" />
+                                    <div class="alert bg-primary" role="alert" style="margin-top:10px;">
+										<span class="glyphicon glyphicon-info-sign"></span>
+										JSON格式配置文件，用于控制客户端应用逻辑。格式如下：<br/>
+										<p>{</p>
+											<p style="text-indent: 16px;">"updates":"本次更新为：更新1；更新2。是否现在就更新？",</p>
+											<p style="text-indent: 16px;">"forceUpdate": true, </p>
+											<p style="text-indent: 16px;">"downloadUrl":"http://somestore.com/app/1.apk"</p>
+										<p>}</p>
+										updates：更新内容；forceUpdate：客户端是否需要强制更新；downloadUrl：应用包下载地址，不配此参数默认从本市场下载。
+									</div>
                                     <form:errors cssClass="field-error" path="metaData" />
                                 </div>
                                 <div class="form-group">

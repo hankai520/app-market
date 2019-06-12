@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-import ren.hankai.appmarket.persist.support.DeleteSpecification;
+import ren.hankai.cordwood.data.domain.DeleteSpecification;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,7 +38,7 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
    * @author hankai
    * @since Nov 22, 2016 10:45:14 AM
    */
-  public int delete(DeleteSpecification<T> spec);
+  int delete(DeleteSpecification<T> spec);
 
   /**
    * 根据查询条件超照复合要求的实体。
@@ -85,12 +85,12 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
   /**
    * 查询唯一满足条件的实体。
    *
-   * @param spec 查询条件
-   * @return 实体示例
+   * @param specification 查询条件
+   * @return 实体实例
    * @author hankai
    * @since Aug 18, 2016 10:30:22 AM
    */
-  T findOne(Specification<T> spec);
+  T findOne(Specification<T> specification);
 
   /**
    * 查询唯一满足条件的实体。
@@ -112,4 +112,5 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
    * @since May 3, 2017 10:24:54 AM
    */
   T findFirst(Specification<T> specification);
+
 }

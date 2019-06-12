@@ -1,11 +1,11 @@
 /*
  * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
 package ren.hankai.appmarket.api.payload;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +15,9 @@ import java.util.List;
  * @version 1.0
  * @since Mar 25, 2016 9:17:29 AM
  */
-public class PaginatedList {
+public class PaginatedList implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private int total;
   private List<?> rows;
@@ -24,7 +26,7 @@ public class PaginatedList {
     return total;
   }
 
-  public void setTotal(int total) {
+  public void setTotal(final int total) {
     this.total = total;
   }
 
@@ -32,7 +34,7 @@ public class PaginatedList {
     return rows;
   }
 
-  public void setRows(List<?> rows) {
+  public void setRows(final List<?> rows) {
     this.rows = rows;
   }
 }

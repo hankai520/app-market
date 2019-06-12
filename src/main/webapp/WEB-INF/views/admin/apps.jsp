@@ -16,8 +16,8 @@
                 url: 'admin/apps.json',
                 sidePagination: 'server',
                 showRefresh: true,
-                pageSize: 50,
-                pageList: [50,100,150],
+                pageSize: 10,
+                pageList: [10,20,40,100],
                 showColumns: true,
                 search: true,
                 pagination: true,
@@ -54,12 +54,6 @@
                     title: '程序包ID',
                     valign: 'middle',
                     sortable: false
-                }, {
-                    field: 'checksum',
-                    title: 'SHA256',
-                    valign: 'middle',
-                    sortable: false,
-                    visible: false
                 }, {
                     title: '二维码',
                     valign: 'middle',

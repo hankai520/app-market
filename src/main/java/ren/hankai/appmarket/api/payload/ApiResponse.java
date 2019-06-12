@@ -1,6 +1,8 @@
 
 package ren.hankai.appmarket.api.payload;
 
+import java.io.Serializable;
+
 /**
  * API 返回的响应信息包装类
  *
@@ -8,8 +10,9 @@ package ren.hankai.appmarket.api.payload;
  * @version 1.0
  * @since Jan 7, 2016 3:09:54 PM
  */
-public class ApiResponse {
+public class ApiResponse implements Serializable {
 
+  private static final long serialVersionUID = 1L;
   /*
    * 响应代码
    */
@@ -33,7 +36,7 @@ public class ApiResponse {
     return code;
   }
 
-  public void setCode(ApiCode code) {
+  public void setCode(final ApiCode code) {
     this.code = code;
   }
 
@@ -41,7 +44,7 @@ public class ApiResponse {
     return message;
   }
 
-  public void setMessage(String message) {
+  public void setMessage(final String message) {
     this.message = message;
   }
 
@@ -49,7 +52,7 @@ public class ApiResponse {
     return body;
   }
 
-  public void setBody(ApiResponseBody body) {
+  public void setBody(final ApiResponseBody body) {
     this.body = body;
   }
 }

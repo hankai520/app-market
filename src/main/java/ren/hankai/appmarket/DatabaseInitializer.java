@@ -11,7 +11,7 @@ import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserGroupBean;
 import ren.hankai.appmarket.persist.model.UserRole;
 import ren.hankai.appmarket.persist.model.UserStatus;
-import ren.hankai.appmarket.persist.support.EntitySpecs;
+import ren.hankai.cordwood.data.domain.EntitySpecs;
 
 import java.util.ArrayList;
 import java.util.Date;
