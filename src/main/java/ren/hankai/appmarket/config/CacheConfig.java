@@ -29,7 +29,7 @@ public class CacheConfig extends CoreCacheConfig {
 
     final CacheConfiguration lightWeightCache = new CacheConfiguration();
     lightWeightCache.setMaxEntriesLocalHeap(1000);
-    lightWeightCache.setTimeToIdleSeconds(60 * 60 * 1); // 缓存1小时
+    lightWeightCache.setTimeToIdleSeconds(60 * 10); // 缓存10分钟
     lightWeightCache.persistence(pc);
     return lightWeightCache;
   }
