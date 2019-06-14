@@ -31,7 +31,7 @@ import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
 import ren.hankai.appmarket.service.AppService;
 import ren.hankai.appmarket.util.MobileAppInfo;
-import ren.hankai.cordwood.core.cache.MiddleWeight;
+import ren.hankai.cordwood.core.cache.LightWeight;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +114,7 @@ public class AppApi {
     }
   }
 
-  @MiddleWeight
+  @LightWeight
   @RequestMapping(value = Route.API_APP_METADATA, produces = {"application/json; charset=utf-8"})
   @ResponseBody
   public ApiResponse getAppMetaData(@PathVariable("sku") final String sku) {

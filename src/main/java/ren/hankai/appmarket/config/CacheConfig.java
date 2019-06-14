@@ -5,6 +5,8 @@
 
 package ren.hankai.appmarket.config;
 
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import ren.hankai.cordwood.core.config.CoreCacheConfig;
@@ -19,5 +21,17 @@ import ren.hankai.cordwood.core.config.CoreCacheConfig;
 @Configuration
 @EnableCaching
 public class CacheConfig extends CoreCacheConfig {
+
+  @Override
+  protected CacheConfiguration getLightWeightCacheConfig() {
+    final PersistenceConfiguration pc = new PersistenceConfiguration();
+    pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
+
+    final CacheConfiguration lightWeightCache = new CacheConfiguration();
+    lightWeightCache.setMaxEntriesLocalHeap(1000);
+    lightWeightCache.setTimeToIdleSeconds(60 * 60 * 1); // 缓存1小时
+    lightWeightCache.persistence(pc);
+    return lightWeightCache;
+  }
 
 }
