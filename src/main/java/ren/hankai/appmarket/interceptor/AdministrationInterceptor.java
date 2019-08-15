@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
@@ -16,6 +15,7 @@ import ren.hankai.appmarket.config.WebConfig;
 import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserRole;
 import ren.hankai.appmarket.service.UserService;
+import ren.hankai.cordwood.core.util.RuntimeInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +35,8 @@ public class AdministrationInterceptor implements HandlerInterceptor {
   private UserService userService;
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-      Object handler) throws Exception {
+  public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler) throws Exception {
     final String contextPath = request.getContextPath();
     String url = request.getRequestURI().substring(contextPath.length());
     if (url.startsWith("/")) {
@@ -44,7 +44,7 @@ public class AdministrationInterceptor implements HandlerInterceptor {
     }
     final HttpSession session = request.getSession();
     // 程序完整版本号
-    // session.setAttribute( name, value );
+    session.setAttribute("appVersion", RuntimeInfo.packageVersion());
     final Object userObj = session.getAttribute(WebConfig.SESSION_KEY_BG_USER);
     UserBean user = null;
     if ((userObj != null) && (userObj instanceof UserBean)) {
@@ -68,23 +68,21 @@ public class AdministrationInterceptor implements HandlerInterceptor {
 
   /*
    * (non-Javadoc)
-   *
    * @see org.springframework.web.servlet.HandlerInterceptor#postHandle(javax.servlet.http.
    * HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object,
    * org.springframework.web.servlet.ModelAndView)
    */
   @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response,
-      Object handler, ModelAndView modelAndView) throws Exception {}
+  public void postHandle(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler, final ModelAndView modelAndView) throws Exception {}
 
   /*
    * (non-Javadoc)
-   *
    * @see org.springframework.web.servlet.HandlerInterceptor#afterCompletion(javax.servlet.http.
    * HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object,
    * java.lang.Exception)
    */
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-      Object handler, Exception ex) throws Exception {}
+  public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler, final Exception ex) throws Exception {}
 }

@@ -1,3 +1,7 @@
+ext {
+    mainVersion = "1.0.0.42"
+}
+
 buildscript {
     ext {
         springBootVersion = "1.5.10.RELEASE"
@@ -26,7 +30,12 @@ sourceSets {
 
 war {
     baseName = 'app-market'
-    version = '1.0.0.41'
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion
+        )
+    }
 }
 
 sourceCompatibility = 1.8
@@ -64,6 +73,7 @@ dependencies {
     compile "net.dongliu:apk-parser:2.1.2"
     compile "com.google.zxing:core:3.3.0"
     compile "com.google.zxing:javase:3.3.0"
+    compile "com.jcabi:jcabi-manifests:1.1"
     
     compile files("libs/cordwood-core-0.0.2.SNAPSHOT.jar")
     compile files("libs/cordwood-data-0.0.2.SNAPSHOT.jar")

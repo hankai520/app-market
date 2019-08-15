@@ -52,7 +52,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="admin"><span>星网</span> 移动应用市场</a>
+                <a class="navbar-brand" href="admin"><span>星网</span> 移动应用市场 V${ appVersion }</a>
                 <ul class="user-menu">
                     <li class="dropdown pull-right">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">

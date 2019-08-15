@@ -1,16 +1,11 @@
 /*
  * Copyright © 2015 Jiangsu Sparknet Software Co., Ltd. All Rights Reserved
- *
  * http://www.sparksoft.com.cn
  */
 
 package ren.hankai.appmarket.persist.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import org.eclipse.persistence.annotations.Cache;
-import org.eclipse.persistence.annotations.CacheCoordinationType;
-import org.eclipse.persistence.annotations.CacheType;
 import org.springframework.web.multipart.MultipartFile;
 import ren.hankai.appmarket.util.DateTimeSerializer;
 
@@ -44,14 +39,8 @@ import javax.validation.constraints.Size;
  * @since Jul 16, 2015 2:00:29 PM
  */
 @Entity
-@Table(
-    name = "apps")
-@Cacheable(true)
-@Cache(
-    type = CacheType.SOFT,
-    size = 1024 * 16,
-    expiry = 1000 * 60 * 2,
-    coordinationType = CacheCoordinationType.INVALIDATE_CHANGED_OBJECTS)
+@Table(name = "apps")
+@Cacheable(false)
 public class AppBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -162,7 +151,7 @@ public class AppBean implements Serializable {
    *
    * @param id id 字段的值
    */
-  public void setId(Integer id) {
+  public void setId(final Integer id) {
     this.id = id;
   }
 
@@ -180,7 +169,7 @@ public class AppBean implements Serializable {
    *
    * @param userGroups userGroups 字段的值
    */
-  public void setUserGroups(List<UserGroupBean> userGroups) {
+  public void setUserGroups(final List<UserGroupBean> userGroups) {
     this.userGroups = userGroups;
   }
 
@@ -198,7 +187,7 @@ public class AppBean implements Serializable {
    *
    * @param sku sku 字段的值
    */
-  public void setSku(String sku) {
+  public void setSku(final String sku) {
     this.sku = sku;
   }
 
@@ -216,7 +205,7 @@ public class AppBean implements Serializable {
    *
    * @param name name 字段的值
    */
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -234,7 +223,7 @@ public class AppBean implements Serializable {
    *
    * @param bundleIdentifier bundleIdentifier 字段的值
    */
-  public void setBundleIdentifier(String bundleIdentifier) {
+  public void setBundleIdentifier(final String bundleIdentifier) {
     this.bundleIdentifier = bundleIdentifier;
   }
 
@@ -252,7 +241,7 @@ public class AppBean implements Serializable {
    *
    * @param packageFile packageFile 字段的值
    */
-  public void setPackageFile(MultipartFile packageFile) {
+  public void setPackageFile(final MultipartFile packageFile) {
     this.packageFile = packageFile;
   }
 
@@ -270,7 +259,7 @@ public class AppBean implements Serializable {
    *
    * @param version version 字段的值
    */
-  public void setVersion(String version) {
+  public void setVersion(final String version) {
     this.version = version;
   }
 
@@ -290,7 +279,7 @@ public class AppBean implements Serializable {
    *
    * @param updateTime updateTime 字段的值
    */
-  public void setUpdateTime(Date updateTime) {
+  public void setUpdateTime(final Date updateTime) {
     this.updateTime = updateTime;
   }
 
@@ -310,7 +299,7 @@ public class AppBean implements Serializable {
    *
    * @param createTime createTime 字段的值
    */
-  public void setCreateTime(Date createTime) {
+  public void setCreateTime(final Date createTime) {
     this.createTime = createTime;
   }
 
@@ -328,7 +317,7 @@ public class AppBean implements Serializable {
    *
    * @param status status 字段的值
    */
-  public void setStatus(AppStatus status) {
+  public void setStatus(final AppStatus status) {
     this.status = status;
   }
 
@@ -346,7 +335,7 @@ public class AppBean implements Serializable {
    *
    * @param statusDesc statusDesc 字段的值
    */
-  public void setStatusDesc(String statusDesc) {
+  public void setStatusDesc(final String statusDesc) {
     this.statusDesc = statusDesc;
   }
 
@@ -364,7 +353,7 @@ public class AppBean implements Serializable {
    *
    * @param platform platform 字段的值
    */
-  public void setPlatform(AppPlatform platform) {
+  public void setPlatform(final AppPlatform platform) {
     this.platform = platform;
   }
 
@@ -382,7 +371,7 @@ public class AppBean implements Serializable {
    *
    * @param platformDesc platformDesc 字段的值
    */
-  public void setPlatformDesc(String platformDesc) {
+  public void setPlatformDesc(final String platformDesc) {
     this.platformDesc = platformDesc;
   }
 
@@ -400,7 +389,7 @@ public class AppBean implements Serializable {
    *
    * @param metaData metaData 字段的值
    */
-  public void setMetaData(String metaData) {
+  public void setMetaData(final String metaData) {
     this.metaData = metaData;
   }
 
@@ -418,7 +407,7 @@ public class AppBean implements Serializable {
    *
    * @param enableUpdateCheck enableUpdateCheck 字段的值
    */
-  public void setEnableUpdateCheck(boolean enableUpdateCheck) {
+  public void setEnableUpdateCheck(final boolean enableUpdateCheck) {
     this.enableUpdateCheck = enableUpdateCheck;
   }
 
@@ -436,7 +425,7 @@ public class AppBean implements Serializable {
    *
    * @param groupIds groupIds 字段的值
    */
-  public void setGroupIds(List<Integer> groupIds) {
+  public void setGroupIds(final List<Integer> groupIds) {
     this.groupIds = groupIds;
   }
 
@@ -444,7 +433,7 @@ public class AppBean implements Serializable {
     return checksum;
   }
 
-  public void setChecksum(String checksum) {
+  public void setChecksum(final String checksum) {
     this.checksum = checksum;
   }
 
@@ -456,6 +445,5 @@ public class AppBean implements Serializable {
   public static long getSerialversionuid() {
     return serialVersionUID;
   }
-
 
 }
