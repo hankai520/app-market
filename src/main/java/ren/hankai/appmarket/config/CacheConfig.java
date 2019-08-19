@@ -28,8 +28,9 @@ public class CacheConfig extends CoreCacheConfig {
     pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
 
     final CacheConfiguration lightWeightCache = new CacheConfiguration();
-    lightWeightCache.setMaxEntriesLocalHeap(1000);
-    lightWeightCache.setTimeToIdleSeconds(60 * 10); // 缓存10分钟
+    lightWeightCache.setMaxEntriesLocalHeap(200);
+    lightWeightCache.setTimeToIdleSeconds(60 * 5); // 距离上次访问5分钟内缓存
+    lightWeightCache.setTimeToLiveSeconds(60 * 5); // 缓存建立后，5分钟过期
     lightWeightCache.persistence(pc);
     return lightWeightCache;
   }
