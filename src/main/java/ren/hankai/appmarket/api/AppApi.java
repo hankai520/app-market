@@ -122,6 +122,8 @@ public class AppApi {
     try {
       final AppBean app = appService.getAppBySku(sku);
       if (app != null) {
+        app.setUserGroups(null);
+        app.setGroupIds(null);
         if (!app.isEnableUpdateCheck()) {
           response.getBody().setError(BusinessError.AppNotFound);
         } else {
