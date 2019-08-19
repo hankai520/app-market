@@ -1,5 +1,5 @@
 ext {
-    mainVersion = "1.0.0.42"
+    mainVersion = "1.0.0.6"
 }
 
 buildscript {
