@@ -41,6 +41,7 @@ atlassian-ide-plugin.xml
 .gradletasknamecache
 home
 home-not-set
+test-home
 /.apt_generated/
 
 *.bak

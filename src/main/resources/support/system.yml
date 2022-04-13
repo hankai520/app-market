@@ -6,3 +6,16 @@ systemSk: 46ee56cd32f85737
 transferKey: 8541ae1088e8f0cd5323503d57403d5b
 # API 鉴权码有效时长
 apiAccessTokenExpiry: 7
+
+#文件存储方式（详见 FileStorageType）
+fileStorageType: 0
+
+#腾讯云对象存储配置
+##秘钥ID
+tencentCosSecretId:  AKIDOcbLqAF4ez5wXsBG5fz3rQjncBVaPzJR
+##秘钥
+tencentCosSecretKey: wd4FBrHSP6YkgNozvc4GCtLXTAbnjPq1
+##存储桶
+tencentCosBucketName: apps-1301799117
+##私有域名
+tencentCosDomainName: apps-1301799117.cos.ap-nanjing.myqcloud.com

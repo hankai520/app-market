@@ -20,10 +20,12 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ren.hankai.appmarket.persist.AppRepository;
 import ren.hankai.appmarket.persist.AppRepository.AppSpecs;
+import ren.hankai.appmarket.persist.TencentCloudRepository;
 import ren.hankai.appmarket.persist.UserGroupRepository;
 import ren.hankai.appmarket.persist.UserRepository;
 import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
+import ren.hankai.appmarket.persist.model.FileStorageType;
 import ren.hankai.appmarket.persist.model.UserBean;
 import ren.hankai.appmarket.persist.model.UserGroupBean;
 import ren.hankai.appmarket.persist.util.PageUtil;
@@ -68,6 +70,8 @@ public class AppService {
   private EntityManager entityManager;
   @Autowired
   private UserRepository userRepo;
+  @Autowired
+  private TencentCloudRepository tcRepo;
 
   /**
    * 根据ID查询应用，同时返回应用对哪些用户组可见。
@@ -151,8 +155,18 @@ public class AppService {
       if (appInfo != null) {
         final File bundleFile = new File(appInfo.getBundlePath());
         if (bundleFile.exists()) {
-          final String appPath = getAppBundlePath(savedApp);
-          FileCopyUtils.copy(bundleFile, new File(appPath));
+          final FileStorageType fst =
+              FileStorageType.fromString(Preferences.getCustomConfig("fileStorageType"));
+          if (FileStorageType.TencentCOS == fst) {
+            final String key = getAppBundleName(savedApp);
+            final boolean saved = tcRepo.save(key, bundleFile);
+            if (!saved) {
+              throw new RuntimeException("上传应用包到腾讯云失败");
+            }
+          } else {
+            final String appPath = getAppBundlePath(savedApp);
+            FileCopyUtils.copy(bundleFile, new File(appPath));
+          }
           if (!FileUtils.deleteQuietly(bundleFile)) {
             logger.error("Failed to delete uploaded package at path: " + appInfo.getBundlePath());
           }
@@ -178,10 +192,8 @@ public class AppService {
    * @since May 15, 2017 6:19:36 PM
    */
   public String getAppBundlePath(final AppBean app) {
-    String name = app.getSku() + "_" + app.getBundleIdentifier() + "_" + app.getVersion();
-    name = name.replaceAll("\\s|\\.|#", "_");
-    String appPath =
-        Preferences.getAttachmentDir() + File.separator + name;
+    final String name = getAppBundleName(app);
+    String appPath = Preferences.getAttachmentDir() + File.separator + name;
     if (app.getPlatform() == AppPlatform.Android) {
       appPath += ".apk";
     } else if (app.getPlatform() == AppPlatform.iOS) {
@@ -190,6 +202,29 @@ public class AppService {
       appPath += ".unknown";
     }
     return appPath;
+  }
+
+  /**
+   * 获取应用安装包文件名。内部使用应用信息构造唯一名称并确保名称对文件路径友好。
+   *
+   * @param app 应用信息
+   * @return 安装包文件名
+   */
+  public String getAppBundleName(final AppBean app) {
+    String name = app.getSku() + "_" + app.getBundleIdentifier() + "_" + app.getVersion();
+    name = name.replaceAll("\\s|\\.|#", "_");
+    return name;
+  }
+
+  /**
+   * 获取应用安装包的云端下载地址。
+   *
+   * @param app 应用信息
+   * @return 下载地址
+   */
+  public String getAppBundleUrl(final AppBean app) {
+    final String key = getAppBundleName(app);
+    return tcRepo.getDownloadUrl(key);
   }
 
   /**

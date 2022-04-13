@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,10 @@ import ren.hankai.appmarket.api.payload.BusinessError;
 import ren.hankai.appmarket.config.Route;
 import ren.hankai.appmarket.persist.model.AppBean;
 import ren.hankai.appmarket.persist.model.AppPlatform;
+import ren.hankai.appmarket.persist.model.FileStorageType;
 import ren.hankai.appmarket.service.AppService;
 import ren.hankai.appmarket.util.MobileAppInfo;
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.cache.LightWeight;
 
 import java.io.File;
@@ -59,12 +63,20 @@ public class AppApi {
 
   @RequestMapping(value = {Route.API_APP_IOS_PACKAGE, Route.API_APP_ANDROID_PACKAGE},
       produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-  public ResponseEntity<FileSystemResource> getAppPackage(
+  public ResponseEntity<Resource> getAppPackage(
       @PathVariable("appId") final Integer appId) {
     final AppBean app = appService.getAppById(appId);
     if (app != null) {
-      final String path = appService.getAppBundlePath(app);
-      return new ResponseEntity<>(new FileSystemResource(path), HttpStatus.OK);
+      final FileStorageType fst =
+          FileStorageType.fromString(Preferences.getCustomConfig("fileStorageType"));
+      if (FileStorageType.TencentCOS == fst) {
+        final HttpHeaders header = new HttpHeaders();
+        header.add("Location", appService.getAppBundleUrl(app));
+        return new ResponseEntity<>(header, HttpStatus.FOUND);
+      } else {
+        final String path = appService.getAppBundlePath(app);
+        return new ResponseEntity<>(new FileSystemResource(path), HttpStatus.OK);
+      }
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
