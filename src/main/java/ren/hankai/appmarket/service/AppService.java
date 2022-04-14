@@ -213,6 +213,13 @@ public class AppService {
   public String getAppBundleName(final AppBean app) {
     String name = app.getSku() + "_" + app.getBundleIdentifier() + "_" + app.getVersion();
     name = name.replaceAll("\\s|\\.|#", "_");
+    if (app.getPlatform() == AppPlatform.Android) {
+      name += ".apk";
+    } else if (app.getPlatform() == AppPlatform.iOS) {
+      name += ".ipa";
+    } else {
+      name += ".unknown";
+    }
     return name;
   }
 
